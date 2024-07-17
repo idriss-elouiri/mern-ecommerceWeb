@@ -1,9 +1,10 @@
 "use client";
 
+import React, { useState } from "react";
 import { Alert } from "flowbite-react";
 import { useRouter } from "next/navigation";
-import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import OAuth from "../google/OAuth";
 
 export default function Register() {
   const [formData, setFormData] = useState({});
@@ -94,6 +95,7 @@ export default function Register() {
                 'Register'
               )}
           </button>
+          <OAuth />
         </form>
         {errorMessage && (
             <Alert className='mt-5' color='failure'>

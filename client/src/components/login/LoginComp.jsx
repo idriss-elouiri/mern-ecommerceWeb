@@ -4,11 +4,18 @@ import { Alert } from "flowbite-react";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import OAuth from "../google/OAuth";
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from '../../redux/users/userSlice';
 
 export default function LoginComp() {
+  const { loading, error: errorMessage } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [loading, setLoading] = useState(false);
   const router = useRouter()
 
   const handleChange = (e) => {
@@ -21,8 +28,7 @@ export default function LoginComp() {
       return setErrorMessage('Please fill out all fields.');
     }
     try {
-      setLoading(true);
-      setErrorMessage(null);
+      dispatch(signInStart());
       const res = await fetch('http://localhost:3005/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -30,16 +36,15 @@ export default function LoginComp() {
       });
       const data = await res.json();
       if (data.success === false) {
-        return setErrorMessage(data.message);
+        dispatch(signInFailure(data.message));
       }
-      setLoading(false);
       if(res.ok) {
         router.push('/');
+        dispatch(signInSuccess(data));
         toast.success("User Register Successfully")
       }
     } catch (error) {
-      setErrorMessage(error.message);
-      setLoading(false);
+      dispatch(signInFailure(error.message));
     }
   };
   return (
@@ -83,6 +88,7 @@ export default function LoginComp() {
                 'Login'
               )}
           </button>
+          <OAuth/>
         </form>
         {errorMessage && (
             <Alert className='mt-5' color='failure'>
