@@ -17,7 +17,7 @@ const __dirname = path.dirname(__filename);
 // Use CORS middleware
 app.use(
   cors({
-    origin: "http://localhost:3000", // Replace with your client's origin
+    origin: "http://localhost:5173", // Replace with your client's origin
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true, // Enable cookies and other credentials
   })
