@@ -67,13 +67,13 @@ export default function DashSidebar() {
             </Sidebar.Item>
           </Link>
           {currentUser.isAdmin && (
-            <Link to='/dashboard?tab=posts'>
+            <Link to='/dashboard?tab=products'>
               <Sidebar.Item
-                active={tab === 'posts'}
+                active={tab === 'products'}
                 icon={HiDocumentText}
                 as='div'
               >
-                Posts
+                Products
               </Sidebar.Item>
             </Link>
           )}

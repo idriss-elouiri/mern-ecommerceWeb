@@ -1,3 +1,4 @@
+import React, { useRef, useEffect } from "react";
 import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -18,19 +19,19 @@ export default function CreateProduct() {
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
   const [uploading, setUploading] = useState(false);
-  const [formData, setFormData] = useState({
-    images: [],
-    title: '',
-    content: '',
-    category: 'uncategorized',
-    price: 0,
-  });
+  const [formData, setFormData] = useState({});
+  const [images, setImages] = useState([])
   const [publishError, setPublishError] = useState(null);
-  console.log(formData);
+  console.log(typeof formData.price);
   const navigate = useNavigate();
+  const quillRef = useRef(null);
+
+  useEffect(() => {
+    const quillElement = quillRef.current;
+  }, []);
 
   const handleImageSubmit = (e) => {
-    if (files.length > 0 && files.length + formData.images.length < 7) {
+    if (files.length > 0 && files.length + images.length < 7) {
       setUploading(true);
       setImageUploadError(false);
       const promises = [];
@@ -40,10 +41,9 @@ export default function CreateProduct() {
       }
       Promise.all(promises)
         .then((urls) => {
-          setFormData({
-            ...formData,
-            images: formData.images.concat(urls),
-          });
+          setImages(
+            images.concat(urls),
+          );
           setImageUploadError(false);
           setUploading(false);
         })
@@ -85,17 +85,10 @@ export default function CreateProduct() {
   };
 
   const handleRemoveImage = (index) => {
-    setFormData({
-      ...formData,
-      images: formData.images.filter((_, i) => i !== index),
-    });
+    setImages(
+      images.filter((_, i) => i !== index),
+    );
   };
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value,
-    });
-  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -104,7 +97,7 @@ export default function CreateProduct() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({formData}),
+        body: JSON.stringify({...formData, images }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -133,9 +126,15 @@ export default function CreateProduct() {
             required
             id="title"
             className="flex-1"
-            onChange={handleChange}
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
           />
-          <Select onChange={handleChange} id="category">
+          <Select
+            onChange={(e) =>
+              setFormData({ ...formData, category: e.target.value })
+            }
+          >
             <option value="uncategorized">Select a category</option>
             <option value="javascript">Laptopts</option>
             <option value="reactjs">Phone</option>
@@ -173,8 +172,8 @@ export default function CreateProduct() {
           </Button>
         </div>
         {imageUploadError && <Alert color="failure">{imageUploadError}</Alert>}
-        {formData.images.length > 0 &&
-          formData.images.map((url, index) => (
+        {images.length > 0 &&
+          images.map((url, index) => (
             <div
               key={url}
               className="flex justify-between p-3 border items-center"
@@ -196,19 +195,20 @@ export default function CreateProduct() {
         <ReactQuill
           theme="snow"
           placeholder="Write something..."
+          ref={quillRef}
           className="h-72 mb-12"
           onChange={(value) => {
             setFormData({ ...formData, content: value });
           }}
         />
-         <TextInput
-            type="number"
-            placeholder="Price"
-            required
-            id="price"
-            className="flex-1"
-            onChange={handleChange}
-          />
+        <TextInput
+          type="number"
+          placeholder="Price"
+          required
+          id="price"
+          className="flex-1"
+          onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+        />
         <Button type="submit" gradientDuoTone="purpleToPink">
           Publish
         </Button>
