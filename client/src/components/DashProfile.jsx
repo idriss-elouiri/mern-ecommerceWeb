@@ -217,7 +217,7 @@ export default function DashProfile() {
           type='text'
           id='username'
           placeholder='name'
-          defaultValue={currentUser.username}
+          defaultValue={currentUser.name}
           onChange={handleChange}
         />
         <TextInput
@@ -242,13 +242,13 @@ export default function DashProfile() {
           {loading ? 'Loading...' : 'Update'}
         </Button>
         {currentUser.isAdmin && (
-          <Link to={'/create-post'}>
+          <Link to={'/create-product'}>
             <Button
               type='button'
               gradientDuoTone='purpleToPink'
               className='w-full'
             >
-              Create a post
+              Create a product
             </Button>
           </Link>
         )}
