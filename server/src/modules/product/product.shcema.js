@@ -5,7 +5,7 @@ export const productShcema = z.object({
   content: z
     .string({ required_error: "content is required" }),
   price: z
-    .number({ required_error: "price is required" }),
+    .string({ required_error: "price is required" }),
   category: z
     .string({ required_error: "category is required" }),
 });

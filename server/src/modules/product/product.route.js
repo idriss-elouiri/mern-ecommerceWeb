@@ -7,6 +7,8 @@ import { validateZod } from '../../middlewares/validate-zod.js';
 const router = express.Router();
 
 router.post('/create', validateZod(productShcema), verifyToken, productController.create)
+router.get('/getproducts', productController.getproducts)
+
 
 
 
