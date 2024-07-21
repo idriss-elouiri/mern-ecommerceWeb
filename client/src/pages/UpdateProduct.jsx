@@ -12,9 +12,10 @@ import { app } from "../firebase.js";
 import { useState } from "react";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-export default function CreateProduct() {
+export default function UpdatedProduct() {
   const [files, setFiles] = useState([]);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
@@ -27,13 +28,42 @@ export default function CreateProduct() {
   });
   const [images, setImages] = useState([])
   const [publishError, setPublishError] = useState(null);
-  console.log(typeof formData.price);
+  const { productId } = useParams();
   const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
   const quillRef = useRef(null);
 
   useEffect(() => {
     const quillElement = quillRef.current;
   }, []);
+
+  useEffect(() => {
+    try {
+      const fetchProduct = async () => {
+        const res = await fetch(`/api/product/getproducts?productId=${productId}`);
+        const data = await res.json();
+        if (!res.ok) {
+          console.log(data.message);
+          setPublishError(data.message);
+          return;
+        }
+        if (res.ok) {
+          setPublishError(null);
+          setFormData({
+            title: data.products[0].title,
+            content: data.products[0].content,
+            category: data.products[0].category,
+            price: data.products[0].price,
+          });
+          setImages(data.products[0].images)
+        }
+      };
+
+      fetchProduct();
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, [productId]);
 
   const handleImageSubmit = (e) => {
     if (files.length > 0 && files.length + images.length < 7) {
@@ -97,10 +127,10 @@ export default function CreateProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/product/create", {
-        method: "POST",
+      const res = await fetch(`/api/product/updateproduct/${productId}/${currentUser._id}`, {
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({...formData, images }),
       });
@@ -109,19 +139,17 @@ export default function CreateProduct() {
         setPublishError(data.message);
         return;
       }
-
       if (res.ok) {
         setPublishError(null);
-        navigate(`/product/${data.slug}`);
       }
     } catch (error) {
-      setPublishError("Something went wrong");
+      setPublishError('Something went wrong');
     }
   };
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
       <h1 className="text-center text-3xl my-7 font-semibold">
-        Create a product
+        updated a product
       </h1>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
@@ -134,11 +162,13 @@ export default function CreateProduct() {
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
+            value={formData.title}
           />
           <Select
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value })
             }
+            value={formData.category}
           >
             <option value="uncategorized">Select a category</option>
             <option value="javascript">Laptopts</option>
@@ -200,6 +230,7 @@ export default function CreateProduct() {
         <ReactQuill
           theme="snow"
           placeholder="Write something..."
+          value={formData.content}
           ref={quillRef}
           className="h-72 mb-12"
           onChange={(value) => {
@@ -213,9 +244,10 @@ export default function CreateProduct() {
           id="price"
           className="flex-1"
           onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+          value={formData.price}
         />
         <Button type="submit" gradientDuoTone="purpleToPink">
-          Publish
+          Updated
         </Button>
         {publishError && (
           <Alert className="mt-5" color="failure">

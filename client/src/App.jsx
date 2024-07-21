@@ -5,6 +5,8 @@ import Login from './pages/Login';
 import PrivateRoute from './components/PrivateRoute';
 import Dashboard from './pages/Dashboard';
 import CreateProduct from './pages/CreateProduct';
+import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute';
+import UpdatedProduct from './pages/UpdateProduct';
 
 export default function App() {
   return (
@@ -13,7 +15,10 @@ export default function App() {
         <Route path='/' element={<Home />} />
         <Route path='/register' element={<Register />} />
         <Route path='/log-in' element={<Login />} />
-        <Route path='/create-product' element={<CreateProduct />} />
+        <Route element={<OnlyAdminPrivateRoute />}>
+          <Route path='/create-product' element={<CreateProduct />} />
+          <Route path='/update-product/:productId' element={<UpdatedProduct />} />
+        </Route>
         <Route element={<PrivateRoute />}>
           <Route path='/dashboard' element={<Dashboard />} />
         </Route>
