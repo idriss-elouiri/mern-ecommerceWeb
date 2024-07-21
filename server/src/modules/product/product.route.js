@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/create', validateZod(productShcema), verifyToken, productController.create)
 router.get('/getproducts', productController.getproducts)
 router.delete('/deleteproduct/:productId/:userId', verifyToken, productController.deleteproduct)
-
+router.put('/updateproduct/:productId/:userId', verifyToken, productController.updateproduct)
 
 
 

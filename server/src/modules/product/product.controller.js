@@ -79,3 +79,26 @@ export const create = async (req, res, next) => {
       next(error);
     }
   };
+
+  export const updateproduct = async (req, res, next) => {
+    if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+      return next(errorHandler(403, 'You are not allowed to update this product'));
+    }
+    try {
+      const updatedProduct = await Product.findByIdAndUpdate(
+        req.params.productId,
+        {
+          $set: {
+            title: req.body.title,
+            content: req.body.content,
+            category: req.body.category,
+            images: req.body.images,
+          },
+        },
+        { new: true }
+      );
+      res.status(200).json(updatedProduct);
+    } catch (error) {
+      next(error);
+    }
+  };
