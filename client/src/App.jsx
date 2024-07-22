@@ -7,10 +7,13 @@ import Dashboard from './pages/Dashboard';
 import CreateProduct from './pages/CreateProduct';
 import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute';
 import UpdatedProduct from './pages/UpdateProduct';
+import ProductDetails from './pages/ProductDetails';
+import Header from './components/Header';
 
 export default function App() {
   return (
     <BrowserRouter>
+    <Header />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/register' element={<Register />} />
@@ -22,6 +25,7 @@ export default function App() {
         <Route element={<PrivateRoute />}>
           <Route path='/dashboard' element={<Dashboard />} />
         </Route>
+        <Route path='/product/:productSlug' element={<ProductDetails />} />
       </Routes>
     </BrowserRouter>
   );

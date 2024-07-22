@@ -7,7 +7,7 @@ import {
   ref,
   uploadBytesResumable,
 } from 'firebase/storage';
-import { app } from '../firebase';
+import { app } from '../../firebase';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import {
@@ -18,7 +18,7 @@ import {
   deleteUserSuccess,
   deleteUserFailure,
   signoutSuccess,
-} from '../redux/user/userSlice';
+} from '../../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
