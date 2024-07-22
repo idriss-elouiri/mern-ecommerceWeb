@@ -4,6 +4,7 @@ import { connectDb } from "./config/db.js";
 import authRouter from "./modules/auth/auth.route.js";
 import userRouter from "./modules/user/user.route.js";
 import productRouter from "./modules/product/product.route.js";
+import commentRouter from "./modules/comment/comment.route.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import cookieParser from 'cookie-parser';
@@ -36,6 +37,8 @@ app.get("/test", (req, res) => {
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
+app.use("/api/comment", commentRouter);
+
 
 app.listen(3005, () => {
   console.log("Server is running on port 3005!");
