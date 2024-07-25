@@ -9,6 +9,7 @@ import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute';
 import UpdatedProduct from './pages/UpdateProduct';
 import ProductDetails from './pages/ProductDetails';
 import Header from './components/Header';
+import ProductPage from './pages/ProductPage';
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
           <Route path='/dashboard' element={<Dashboard />} />
         </Route>
         <Route path='/product/:productSlug' element={<ProductDetails />} />
+        <Route path='/product-page' element={<ProductPage />} />
       </Routes>
     </BrowserRouter>
   );
