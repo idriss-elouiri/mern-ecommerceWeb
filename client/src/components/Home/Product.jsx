@@ -1,19 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const Product = () => {
-    const [products, setProducts] = useState([])
-    useEffect(() => {
-        const fetchProducts = async () => {
-        const res = await fetch("/api/product/getproducts")
-        const data = await res.json()
-        if(res.ok){
-            setProducts(data.products)
-        }
-        }
-        fetchProducts()
-    }, [])
-    console.log(products)
+const Product = ({products}) => {
+   
   return (
     <div className="container my-10">
       <div className="text-center mb-10 max-w-[600px] mx-auto space-y-2">
