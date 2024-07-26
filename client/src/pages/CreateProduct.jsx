@@ -19,13 +19,15 @@ export default function CreateProduct() {
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
-    category: "uncategorized",
+    category: "",
     price: 0,
   });
-  const [images, setImages] = useState([])
+  const [images, setImages] = useState([]);
+  const [productProperties, setProductProperties] = useState({});
   const [publishError, setPublishError] = useState(null);
   console.log(typeof formData.price);
   const navigate = useNavigate();
@@ -46,9 +48,7 @@ export default function CreateProduct() {
       }
       Promise.all(promises)
         .then((urls) => {
-          setImages(
-            images.concat(urls),
-          );
+          setImages(images.concat(urls));
           setImageUploadError(false);
           setUploading(false);
         })
@@ -90,9 +90,7 @@ export default function CreateProduct() {
   };
 
   const handleRemoveImage = (index) => {
-    setImages(
-      images.filter((_, i) => i !== index),
-    );
+    setImages(images.filter((_, i) => i !== index));
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -102,7 +100,11 @@ export default function CreateProduct() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({...formData, images }),
+        body: JSON.stringify({
+          ...formData,
+          images,
+          properties: productProperties,
+        }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -118,6 +120,39 @@ export default function CreateProduct() {
       setPublishError("Something went wrong");
     }
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch("/api/category/getcategories");
+      const data = await res.json();
+      if (res.ok) {
+        setCategories(data);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const propertiesToFill = [];
+  if (categories.length > 0 && formData.category) {
+    let catInfo = categories.find(({ _id }) => _id === formData.category);
+    propertiesToFill.push(...catInfo.properties);
+    while (catInfo?.parent?._id) {
+      const parentCat = categories.find(
+        ({ _id }) => _id === catInfo?.parent?._id
+      );
+      propertiesToFill.push(...parentCat.properties);
+      catInfo = parentCat;
+    }
+  }
+  function setProductProp(propName, value) {
+    setProductProperties((prev) => {
+      const newProductProps = { ...prev };
+      newProductProps[propName] = value;
+      return newProductProps;
+    });
+  }
+  function updateImagesOrder(imageUrls) {
+    setImages(imageUrls);
+  }
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
       <h1 className="text-center text-3xl my-7 font-semibold">
@@ -135,18 +170,48 @@ export default function CreateProduct() {
               setFormData({ ...formData, title: e.target.value })
             }
           />
-          <Select
-            onChange={(e) =>
-              setFormData({ ...formData, category: e.target.value })
-            }
-          >
-            <option value="uncategorized">Select a category</option>
-            <option value="javascript">Laptopts</option>
-            <option value="reactjs">Phone</option>
-            <option value="nextjs">Smart Watch</option>
-            <option value="nextjs">HeadPhone</option>
-            <option value="nextjs">EarPhone</option>
-          </Select>
+          {/* Category select */}
+          <div>
+            <Select
+              id="category"
+              value={formData.category}
+              onChange={(e) =>
+                setFormData({ ...formData, category: e.target.value })
+              }
+            >
+              <option value="0">No category selected</option>
+              {categories.length > 0 &&
+                categories.map((cat) => (
+                  <option key={cat._id} value={cat._id}>
+                    {cat.name}
+                  </option>
+                ))}
+            </Select>
+          </div>
+          {propertiesToFill.length > 0 &&
+            propertiesToFill.map((p) => (
+              <div key={p.propertyName} className="flex items-center gap-2">
+                <label>
+                  {p.propertyName[0].toUpperCase() +
+                    p.propertyName.substring(1)}
+                </label>
+
+                <div>
+                  <Select
+                    value={productProperties[p.propertyName]}
+                    onChange={(ev) =>
+                      setProductProp(p.propertyName, ev.target.value)
+                    }
+                  >
+                    {p.values.map((v) => (
+                      <option key={v} value={v}>
+                        {v}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
+              </div>
+            ))}
         </div>
         <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
           <FileInput
