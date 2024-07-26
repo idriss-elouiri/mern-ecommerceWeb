@@ -5,6 +5,7 @@ import authRouter from "./modules/auth/auth.route.js";
 import userRouter from "./modules/user/user.route.js";
 import productRouter from "./modules/product/product.route.js";
 import commentRouter from "./modules/comment/comment.route.js";
+import categoryRouter from "./modules/category/category.route.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import cookieParser from 'cookie-parser';
@@ -38,6 +39,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
 app.use("/api/comment", commentRouter);
+app.use("/api/category", categoryRouter);
 
 
 app.listen(3005, () => {

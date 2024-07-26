@@ -1,4 +1,4 @@
-import Category from "./category.model";
+import Category from "./category.model.js";
 
 export async function createcateg(req, res, next) {
   const { name, parent, properties } = req.body;
@@ -36,7 +36,7 @@ export async function updatedcateg(req, res, next) {
 
   try {
     const updatedCategory = await Category.findByIdAndUpdate(
-      params.id,
+      req.params.categoryId,
       {
         $set: {
           name,
@@ -57,7 +57,7 @@ export async function deletecatg(req, res, next) {
     return next(errorHandler(403, "You are not allowed to create a category"));
   }
   try {
-    const deletedCategory = await Category.findByIdAndDelete(params.id);
+    const deletedCategory = await Category.findByIdAndDelete(req.params.categoryId);
     if (!deletedCategory) {
       return next(errorHandler(400, "Category Not Found"));
     }
