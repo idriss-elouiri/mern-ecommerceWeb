@@ -21,6 +21,7 @@
     "react-quill": "^2.0.0",
     "react-redux": "^9.0.1",
     "react-router-dom": "^6.20.0",
+    "react-sortablejs": "^6.1.4",
     "redux-persist": "^6.0.0"
   },
   "devDependencies": {
