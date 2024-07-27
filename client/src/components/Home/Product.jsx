@@ -1,8 +1,14 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { addItem } from '../../redux/cart/cartSlice';
+import { useDispatch } from "react-redux";
 
 const Product = ({products}) => {
-   
+  const dispatch = useDispatch();
+  const handleSubmit = (product) => {
+    console.log(product)
+    dispatch(addItem(product))
+  }
+
   return (
     <div className="container my-10">
       <div className="text-center mb-10 max-w-[600px] mx-auto space-y-2">
@@ -23,6 +29,7 @@ const Product = ({products}) => {
                   <div className="hidden group-hover:flex  absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-full h-full text-center group-hover:backdrop-blur-sm justify-center items-center duration-200">
                     <button
                       className="py-2 px-3 bg-emerald-400 text-white rounded-full"
+                      onClick={() => handleSubmit(product)}
                     >
                       Add to cart
                     </button>

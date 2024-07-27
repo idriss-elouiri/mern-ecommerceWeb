@@ -54,7 +54,7 @@ const ProductPage = () => {
                   .filter((p) => p.category === categoryName._id)
                   .map((productInfo) => (
                     <div key={productInfo._id} className="px-5 snap-start">
-                      <ProductBox {...productInfo} />
+                      <ProductBox productInfo={productInfo} />
                     </div>
                   ))}
               </div>

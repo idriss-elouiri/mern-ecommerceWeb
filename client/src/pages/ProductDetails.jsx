@@ -2,7 +2,6 @@ import { Button, Spinner } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import CommentSection from "../components/CommentSection";
-import ProductCard from "../components/ProductCard";
 import DetailsProductComp from "../components/Home/DetailsProductComp";
 import Product from "../components/Home/Product";
 
