@@ -4,6 +4,7 @@ import Product from "../components/Home/Product";
 import Services from "../components/Home/Services";
 import Partners from "../components/Home/Partners";
 import Footer from "../components/Home/Footer";
+import Hero from "../components/Home/Hero";
 
 const Home = () => {
   const [products, setProducts] = useState([])
@@ -19,6 +20,7 @@ const Home = () => {
   }, [])
   return (
     <main>
+      <Hero/>
       <Services/>
       <Category />
       <Product products={products}/>
