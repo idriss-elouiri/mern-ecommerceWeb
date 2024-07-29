@@ -1,5 +1,5 @@
 // src/components/Cart.js
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   removeItem,
@@ -12,6 +12,7 @@ const Cart = () => {
   const items = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
   const deliveryPrice = 5.99; // Fixed delivery price
+  const [address, setAddress] = useState({});
 
   // Calculate the subtotal
   const subtotal = items.reduce(
@@ -27,6 +28,30 @@ const Cart = () => {
         <p className="mt-4">Your shopping cart is empty 😔</p>
       </section>
     );
+  }
+
+  function handleAddressChange(ev) {
+    setAddress((prevAddress) => ({
+      ...prevAddress,
+      [ev.target.id]: ev.target.value,
+    }));
+  }
+
+  async function proceedToCheckout(ev) {
+    ev.preventDefault();
+    // address and shopping cart products
+
+     const res = await fetch("/api/checkout/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          address,
+          cartProducts: items,
+        }),
+      })
+      if(res.ok){
+        window.location = await response.json();
+      }
   }
 
   return (
@@ -111,6 +136,78 @@ const Cart = () => {
           Clear Cart
         </button>
       </div>
+      <form onSubmit={proceedToCheckout}>
+        <div className="mt-8 flex flex-col">
+          <div className="mt-8">
+            <input
+              name="phone"
+              id="phone"
+              value={address.phone}
+              onChange={handleAddressChange}
+              className="p-2 border-[3px] border-[lightgray] bg-slate-100 outline-none w-full rounded mb-2"
+              type="number"
+              placeholder="Your Phone"
+            />
+            <input
+              name="streetAddress"
+              id="streetAddress"
+              value={address.streetAddress}
+              onChange={handleAddressChange}
+              className="p-2 border-[3px] border-[lightgray] bg-slate-100 outline-none w-full rounded  mb-2"
+              type="text"
+              placeholder="Street address"
+            />
+            <input
+              name="city"
+              id="city"
+              value={address.city}
+              onChange={handleAddressChange}
+              className="p-2 border-[3px] border-[lightgray] bg-slate-100 outline-none w-full rounded  mb-2"
+              type="text"
+              placeholder="City"
+            />
+            <input
+              name="country"
+              id="country"
+              value={address.country}
+              onChange={handleAddressChange}
+              className="p-2 border-[3px] border-[lightgray] bg-slate-100 outline-none w-full rounded  mb-2"
+              type="text"
+              placeholder="Your country"
+            />
+            <input
+              name="postalCode"
+              id="postalCode"
+              value={address.postalCode}
+              onChange={handleAddressChange}
+              className="p-2 border-[3px] border-[lightgray] bg-slate-100 outline-none w-full rounded "
+              type="number"
+              placeholder="Postal Code"
+            />
+          </div>
+        </div>
+        <div className="mt-8">
+          <div className="flex my-3">
+            <h3 className="grow font-bold text-gray-400">Subtotal:</h3>
+            <h3 className="font-bold">${subtotal}</h3>
+          </div>
+          <div className="flex my-3">
+            <h3 className="grow font-bold text-gray-400">Delivery:</h3>
+            <h3 className="font-bold"> ${deliveryPrice}</h3>
+          </div>
+          <div className="flex my-3 border-t pt-3 border-dashed border-emerald-500">
+            <h3 className="grow font-bold text-gray-400">Total:</h3>
+            <h3 className="font-bold">${total}</h3>
+          </div>
+        </div>
+        <input type="hidden" name="products" />
+        <button
+          type="submit"
+          className="bg-emerald-500 px-5 py-2 rounded-xl font-bold text-white w-full my-4 shadow-emerald-300 shadow-lg"
+        >
+          Pay ${total}
+        </button>
+      </form>
     </section>
   );
 };
