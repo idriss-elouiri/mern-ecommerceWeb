@@ -41,11 +41,11 @@ export async function create(req, res) {
     mode: "payment",
     customer_email: userEmail,
     success_url:
-      "http:/localhost:5173/" +
-      "/dashboard?tab=orders/" +
+      "http://localhost:5173/" +
+      "order/" +
       orderDoc._id.toString() +
       "?clear-cart=1",
-    cancel_url: "http:/localhost:5173/" + "cart?canceled=1",
+    cancel_url: "http://localhost:5173/" + "cart?canceled=1",
     metadata: { orderId: orderDoc._id.toString() },
     payment_intent_data: {
       metadata: { orderId: orderDoc._id.toString() },
