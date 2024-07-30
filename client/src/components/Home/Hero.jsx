@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { FaLongArrowAltRight } from "react-icons/fa";
 import Button from "../Button";
 
 const Hero = () => {
-    const [productsInfo, setProductsInfo] = useState([]);
+  const [productsInfo, setProductsInfo] = useState([]);
 
-  
   useEffect(() => {
     const fetchProducts = async () => {
       const res = await fetch(`/api/product/getproducts?limit=3`);
@@ -42,14 +42,18 @@ const Hero = () => {
                     <h1 className="text-5xl md:text-6xl font-bold">
                       {data.title}
                     </h1>
-                    <p className="text-slate-600" dangerouslySetInnerHTML={{ __html:  data.content }}></p>
-                    <div>
-                      <Button
-                        text="Shop By Category"
-                        bgColor={"bg-brandGreen"}
-                        textColor={"text-white"}
-                        category={data.categoryId}
-                      />
+                    <p
+                      className="text-slate-600"
+                      dangerouslySetInnerHTML={{ __html: data.content }}
+                    ></p>
+                    <div className="flex items-center gap-3">
+                      <p className="flex items-center text-primary px-4 py-2 bg-brandWhite rounded-full gap-3 font-semibold">
+                        Exclusive offer -50%{" "}
+                        <span>
+                          <FaLongArrowAltRight />
+                        </span>
+                      </p>
+                      <button className="underline font-semibold">Buy now</button>
                     </div>
                   </div>
                   <div className="order-1 md:order-2">

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 
 export default function Order() {
   const [order, setOrder] = useState();
-  const [loadingOrder, setLoadingOrder] = useState(true);
+  const [loadingOrder, setLoadingOrder] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -18,6 +18,7 @@ export default function Order() {
           const res = await fetch(`/api/order/get?_id=${id}`)
         const data = await res.json()
             setOrder(data)
+            setLoadingOrder(false)
         }
     }
     fetchOrder()

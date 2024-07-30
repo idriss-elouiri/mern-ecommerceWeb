@@ -32,7 +32,7 @@ const DetailsProductComp = ({ product }) => {
               </span>
               <h1 className="text-3xl font-bold">{product?.title}</h1>
             </div>
-            <p className="text-gray-700">{product?.content}</p>
+            <p className="text-gray-700"  dangerouslySetInnerHTML={{ __html: product.content }}></p>
             <h6 className="text-2xl font-semibold">$ {product?.price}</h6>
             <div className="flex flex-row items-center gap-12">
               <div className="flex flex-row items-center">

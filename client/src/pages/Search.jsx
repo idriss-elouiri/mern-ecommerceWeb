@@ -170,7 +170,7 @@ export default function Search() {
           {!loading &&
             products &&
             products.map((productInfo) => (
-              <ProductBox key={productInfo._id} {...productInfo} />
+              <ProductBox key={productInfo._id} productInfo={productInfo} />
             ))}
           {showMore && (
             <button
