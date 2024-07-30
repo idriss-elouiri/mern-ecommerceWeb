@@ -73,7 +73,6 @@ export default function UpdatedProduct() {
           setImages(data.products[0].images);
         }
       };
-
       fetchProduct();
     } catch (error) {
       console.log(error.message);

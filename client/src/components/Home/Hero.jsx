@@ -4,13 +4,14 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import Button from "../Button";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   const [productsInfo, setProductsInfo] = useState([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const res = await fetch(`/api/product/getproducts?limit=3`);
+      const res = await fetch(`/api/product/getproducts?limit=5`);
       const data = await res.json();
       if (res.ok) {
         setProductsInfo(data.products);
@@ -44,8 +45,8 @@ const Hero = () => {
                     </h1>
                     <p
                       className="text-slate-600"
-                      dangerouslySetInnerHTML={{ __html: data.content }}
-                    ></p>
+                      
+                    >{data.briefDesc}</p>
                     <div className="flex items-center gap-3">
                       <p className="flex items-center text-primary px-4 py-2 bg-brandWhite rounded-full gap-3 font-semibold">
                         Exclusive offer -50%{" "}
@@ -53,7 +54,7 @@ const Hero = () => {
                           <FaLongArrowAltRight />
                         </span>
                       </p>
-                      <button className="underline font-semibold">Buy now</button>
+                      <Link to={`/product-details/${data.slug}`} className="underline font-semibold">Buy now</Link>
                     </div>
                   </div>
                   <div className="order-1 md:order-2">

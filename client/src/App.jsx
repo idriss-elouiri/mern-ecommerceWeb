@@ -29,7 +29,7 @@ export default function App() {
         <Route element={<PrivateRoute />}>
           <Route path='/dashboard' element={<Dashboard />} />
         </Route>
-        <Route path='/product/:productSlug' element={<ProductDetails />} />
+        <Route path='/product-details/:productSlug' element={<ProductDetails />} />
         <Route path='/product-page' element={<ProductPage />} />
         <Route path='/search' element={<Search />} />
         <Route path='/cart' element={<Cart />} />
