@@ -23,7 +23,7 @@ const Home = () => {
       <Hero/>
       <Services/>
       <Categories />
-      <Product products={products}/>
+      <Product products={products} textHeading={"New Products"}/>
       <Partners/>
       <Footer/>
     </main>

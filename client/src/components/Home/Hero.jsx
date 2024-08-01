@@ -32,7 +32,7 @@ const Hero = () => {
     pauseOnFocus: true,
   };
   return (
-    <div className="w-[90%] mx-auto ">
+    <div className="w-[90%] mx-auto my-10 ">
       <div className="overflow-hidden rounded-3xl min-h-[550px] sm:min-h-[650px] hero-bg-color flex justify-center items-center">
         <div className="container pb-8 sm:pb-0">
           <Slider {...settings}>
@@ -62,7 +62,7 @@ const Hero = () => {
                       <img
                         src={data.images[0]}
                         alt=""
-                        className="w-[300px] h-[300px] sm:h-[450px] sm:w-[450px]  object-contain mx-auto drop-shadow-[-8px_4px_6px_rgba(0,0,0,.4)] z-40 relative"
+                        className="lg:w-[350px] lg:h-[350px] md:h-[280px] md:w-[280px] h-[350px] w-[350px]  object-contain mx-auto drop-shadow-[-8px_4px_6px_rgba(0,0,0,.4)] z-40 relative"
                       />
                     </div>
                   </div>
