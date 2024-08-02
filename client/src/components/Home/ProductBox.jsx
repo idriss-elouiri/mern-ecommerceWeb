@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
 import { addItem } from '../../redux/cart/cartSlice';
 import { useDispatch } from "react-redux";
+import { useState } from "react";
 
 export default function ProductBox({productInfo}) {
   const dispatch = useDispatch();
+  const [showMore, setShowMore] = useState(false);
+
+
 
   return (
     <div className="w-[250px] border rounded-xl p-2">

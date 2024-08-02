@@ -37,7 +37,7 @@ const Product = ({products , textHeading}) => {
                 </div>
                 <div className="leading-7">
                   <h3 className="font-semibold">
-                    <Link to={"/products/" + product._id}>
+                    <Link to={"/product-details/" + product.slug}>
                       {product.title}
                     </Link>
                   </h3>
