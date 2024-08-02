@@ -8,7 +8,7 @@ export default function ProductBox({productInfo}) {
   return (
     <div className="w-[250px] border rounded-xl p-2">
       <div className="bg-slate-100 p-2 rounded-xl ">
-        <Link to={"/products/" + productInfo._id}>
+        <Link >
           <img
             src={productInfo.images[0]}
             className="w-full h-[150px] object-contain"
@@ -17,12 +17,12 @@ export default function ProductBox({productInfo}) {
         </Link>
       </div>
       <div className="mt-2">
-        <Link to={"/products/" +productInfo. _id}>
+        <Link >
           <h3 className="font-bold text-lg">{productInfo.title}</h3>
         </Link>
       </div>
       <p className="text-sm mt-1 leading-4 text-gray-500 line-clamp-3">
-        {productInfo.content}
+        {productInfo.briefDesc}
       </p>
       <div className="flex mt-1">
         <div className="text-2xl font-bold grow">${productInfo.price}</div>
@@ -33,6 +33,7 @@ export default function ProductBox({productInfo}) {
           +
         </button>
       </div>
+      <Link to={`/product-details/${productInfo.slug}`} className="underline hover:text-primary py-3">Read More...</Link>
     </div>
   );
 }

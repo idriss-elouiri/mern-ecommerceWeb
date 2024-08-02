@@ -27,11 +27,9 @@ const DetailsProductComp = ({ product }) => {
           {/* ABOUT */}
           <div className="flex flex-col gap-4 lg:w-2/4">
             <div>
-              <span className=" text-emerald-500 font-semibold">
-                Special Sneaker
-              </span>
               <h1 className="text-3xl font-bold">{product?.title}</h1>
             </div>
+            <p className="" >{product?.briefDesc}</p>
             <p className="text-gray-700"  dangerouslySetInnerHTML={{ __html: product.content }}></p>
             <h6 className="text-2xl font-semibold">$ {product?.price}</h6>
             <div className="flex flex-row items-center gap-12">
