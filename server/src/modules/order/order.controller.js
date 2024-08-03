@@ -14,9 +14,8 @@ export async function getorder(req, res, next) {
     return res.status(201).json(orders);
   }
 
-  if (userId) {
+  if (userEmail) {
     const order = await Order.find({userEmail})
     return res.status(202).json(order);
-
   }
 }

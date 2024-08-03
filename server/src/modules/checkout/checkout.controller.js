@@ -1,13 +1,20 @@
 import Order from "../order/order.model.js";
 import Product from "../product/product.model.js";
-import Stripe from 'stripe';
+import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SK);
-
 
 export async function create(req, res) {
   const { cartProducts, address } = req.body;
   const userEmail = req.user.email;
+
+  if (!cartProducts) {
+    throw new Error("No products found in the cart.");
+  }
+
+  const productsArray = Array.isArray(cartProducts)
+    ? cartProducts
+    : [cartProducts];
 
   const orderDoc = await Order.create({
     userEmail,
@@ -17,12 +24,16 @@ export async function create(req, res) {
   });
 
   const stripeLineItems = [];
+
   for (const cartProduct of cartProducts) {
     const productInfo = await Product.findById(cartProduct._id);
 
     let productPrice = productInfo.price;
 
     const productName = cartProduct.title;
+
+    productPrice = Math.round(productPrice);
+
 
     stripeLineItems.push({
       quantity: 1,
@@ -61,5 +72,4 @@ export async function create(req, res) {
     ],
   });
   res.status(200).json(stripeSession.url);
-
 }
