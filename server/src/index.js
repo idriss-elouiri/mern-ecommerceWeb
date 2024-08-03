@@ -22,8 +22,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Get the directory name of the current module file
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = path.resolve();
 
 // Use CORS middleware
 app.use(
@@ -34,7 +33,11 @@ app.use(
   })
 );
 
-app.use(express.static(path.join(__dirname, "/client/dist")));
+app.use(express.static(path.join(__dirname, '/client/dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
 
 app.get("/test", (req, res) => {
   res.json({ message: "test success" });
