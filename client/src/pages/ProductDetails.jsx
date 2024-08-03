@@ -39,7 +39,7 @@ export default function ProductDetails() {
   useEffect(() => {
     try {
       const fetchRecentProducts = async () => {
-        const res = await fetch(`/api/product/getproducts?limit=3`);
+        const res = await fetch(`/api/product/getproducts?limit=4`);
         const data = await res.json();
         if (res.ok) {
           setRecentProducts(data.products);
@@ -61,14 +61,11 @@ export default function ProductDetails() {
     <main className="p-3 flex flex-col max-w-6xl mx-auto min-h-screen">
       {product && <DetailsProductComp product={product} />}
       <CommentSection productId={product._id} />
-      <div className="flex flex-col justify-center items-center mb-5">
-        <h1 className="text-xl mt-5">Recent articles</h1>
         <div className="flex flex-wrap gap-5 mt-5 justify-center">
           {recentProducts &&
-              <Product products={recentProducts}  />
+              <Product products={recentProducts} textHeading={"Recent Articels"} />
           }
         </div>
-      </div>
     </main>
   );
 }

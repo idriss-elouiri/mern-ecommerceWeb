@@ -54,7 +54,7 @@ export default function Order() {
               <div className="pl-4 items-center">
                 <h3 className="font-bold text-lg">{productInfo.title}</h3>
                 <p className="text-sm leading-4 text-gray-500 line-clamp-3">
-                  {productInfo.content}
+                  {productInfo.briefDesc}
                 </p>
                 <div className="flex mt-1">
                   <div className="grow font-bold">${productInfo.price}</div>

@@ -1,5 +1,5 @@
 // src/components/Cart.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   removeItem,
@@ -14,6 +14,13 @@ const Cart = () => {
   const deliveryPrice = 5.99; // Fixed delivery price
   const [address, setAddress] = useState({});
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (window.location.href.includes('canceled=1')) {
+        console.log('Payment failed 😔');
+      }
+    }
+  }, []);
   // Calculate the subtotal
   const subtotal = items.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -39,20 +46,24 @@ const Cart = () => {
 
   async function proceedToCheckout(ev) {
     ev.preventDefault();
-    // address and shopping cart products
+    
+    fetch('/api/checkout/create', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        address,
+        cartProducts: items,
+      }),
+    }).then(async (response) => {
+      if (response.ok) {
+        console.log("it work")
 
-     const res = await fetch("/api/checkout/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          address,
-          cartProducts: items,
-        }),
-      })
-      if(res.ok){
         window.location = await response.json();
+      } else {
+        console.log("dont work")
       }
-  }
+    });
+}
 
   return (
     <section className="mt-20 px-10 md:mt-10">

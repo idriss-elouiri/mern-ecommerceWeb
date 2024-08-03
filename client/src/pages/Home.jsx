@@ -22,7 +22,7 @@ const Home = () => {
       <Hero/>
       <Services/>
       <Categories />
-      <Product products={products} textHeading={"New Products"}/>
+      <Product products={products} textHeading={"Latest Products"}/>
       <Footer/>
     </main>
   );
