@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import Link from "react-router-dom"
+import {Link} from "react-router-dom"
 const pageSize = 10; // Number of orders per page
 
-export default function OrdersPage() {
+export default function DashOrders() {
   const [orders, setOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loadingOrders, setLoadingOrders] = useState(true);
@@ -96,7 +96,7 @@ export default function OrdersPage() {
                       {" "}
                       <div className="justify-end flex gap-2 items-center whitespace-nowrap">
                         <Link
-                          to={"/dashboard/dashOrders/" + order._id}
+                          to={"/order/" + order._id}
                           className="button"
                         >
                           Show order

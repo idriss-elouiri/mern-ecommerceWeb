@@ -7,6 +7,8 @@ import {
   HiAnnotation,
   HiChartPie,
 } from "react-icons/hi";
+import { CgShoppingCart } from "react-icons/cg";
+import { IoIosSettings } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { signoutSuccess } from "../../redux/user/userSlice";
@@ -98,13 +100,22 @@ export default function DashSidebar() {
               <Link to="/dashboard?tab=categories">
                 <Sidebar.Item
                   active={tab === "categories"}
-                  icon={HiOutlineUserGroup}
+                  icon={IoIosSettings}
                   as="div"
                 >
                   Categories
                 </Sidebar.Item>
               </Link>
-              
+
+              <Link to="/dashboard?tab=orders">
+                <Sidebar.Item
+                  active={tab === "orders"}
+                  icon={CgShoppingCart}
+                  as="div"
+                >
+                  Orders
+                </Sidebar.Item>
+              </Link>
             </>
           )}
           <Sidebar.Item
