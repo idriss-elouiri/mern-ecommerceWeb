@@ -13,6 +13,7 @@ import ProductPage from './pages/ProductPage';
 import Search from './pages/Search';
 import Cart from './pages/Cart';
 import Order from './pages/Order';
+import About from './pages/About';
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
     <Header />
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='/about' element={<About />} />
         <Route path='/register' element={<Register />} />
         <Route path='/log-in' element={<Login />} />
         <Route element={<OnlyAdminPrivateRoute />}>
