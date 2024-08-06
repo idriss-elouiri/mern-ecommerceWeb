@@ -29,12 +29,11 @@ app.use(express.static(path.join(__dirname, 'client/dist')));
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // Replace with your client's origin
+    origin: "http://localhost:5173", 
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true, // Enable cookies and other credentials
+    credentials: true,
   })
 );
-
 
 app.get("/test", (req, res) => {
   res.json({ message: "test success" });
@@ -47,7 +46,6 @@ app.use("/api/comment", commentRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/checkout", checkoutRouter);
 app.use("/api/order", orderRouter);
-
 
 app.listen(3005, () => {
   console.log("Server is running on port 3005!");
