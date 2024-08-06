@@ -10,6 +10,7 @@ import checkoutRouter from "./modules/checkout/checkout.route.js";
 import orderRouter from "./modules/order/order.route.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import { dirname } from 'path';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 
@@ -21,10 +22,11 @@ connectDb();
 app.use(express.json());
 app.use(cookieParser());
 
-// Get the directory name of the current module file
-const __dirname = path.resolve();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-// Use CORS middleware
+app.use(express.static(path.join(__dirname, 'client/dist')));
+
 app.use(
   cors({
     origin: "http://localhost:5173", // Replace with your client's origin
@@ -33,11 +35,6 @@ app.use(
   })
 );
 
-app.use(express.static(path.join(__dirname, '/client/dist')));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
-});
 
 app.get("/test", (req, res) => {
   res.json({ message: "test success" });
