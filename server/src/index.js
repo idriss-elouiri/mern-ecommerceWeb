@@ -8,9 +8,6 @@ import commentRouter from "./modules/comment/comment.route.js";
 import categoryRouter from "./modules/category/category.route.js";
 import checkoutRouter from "./modules/checkout/checkout.route.js";
 import orderRouter from "./modules/order/order.route.js";
-import path from "path";
-import { fileURLToPath } from "url";
-import { dirname } from 'path';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 
@@ -21,11 +18,7 @@ connectDb();
 
 app.use(express.json());
 app.use(cookieParser());
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-app.use(express.static(path.join(__dirname, 'client/dist')));
+app.use(cors());
 
 app.use(
   cors({
