@@ -123,7 +123,7 @@ export default function CreateProduct() {
 
       if (res.ok) {
         setPublishError(null);
-        navigate(`/product/${data.slug}`);
+        navigate(`/product-details/${data.slug}`);
       }
     } catch (error) {
       setPublishError("Something went wrong");
@@ -296,7 +296,7 @@ export default function CreateProduct() {
         />
         <ReactQuill
           theme="snow"
-          placeholder="Write something..."
+          placeholder="Write something about properties..."
           ref={quillRef}
           className="h-72 mb-12"
           onChange={(value) => {

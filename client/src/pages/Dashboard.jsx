@@ -7,6 +7,7 @@ import DashUsers from '../components/Dashboard/DashUsers';
 import DashComments from '../components/Dashboard/DashComments';
 import DashCategories from '../components/Dashboard/DashCatgory';
 import DashOrders from '../components/Dashboard/DashOrders';
+import DashboardComp from '../components/Dashboard/DashComp';
 
 
 export default function Dashboard() {

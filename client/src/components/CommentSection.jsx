@@ -124,7 +124,7 @@ export default function CommentSection({ productId }) {
             to={'/dashboard?tab=profile'}
             className='text-xs text-cyan-600 hover:underline'
           >
-            @{currentUser.username}
+            @{currentUser.name}
           </Link>
         </div>
       ) : (
