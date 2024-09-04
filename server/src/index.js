@@ -23,14 +23,11 @@ app.use(cors());
 app.use(
   cors({
     origin: process.env.FRONTEND_URL, 
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    methods: "GET,PUT,POST,DELETE",
     credentials: true,
   })
 );
 
-app.get("/test", (req, res) => {
-  res.json({ message: "test success" });
-});
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
