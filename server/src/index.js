@@ -21,9 +21,6 @@ app.use(cookieParser());
 app.use(cors());
 app.use(express.static("public"));
 
-app.get("/your-endpoint", (req, res) => {
-  res.send("This is the correct route!");
-});
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
