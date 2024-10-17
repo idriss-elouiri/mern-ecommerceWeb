@@ -24,7 +24,7 @@ export default function Login() {
     }
     try {
       dispatch(signInStart());
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -48,10 +48,10 @@ export default function Login() {
         {/* left */}
         <div className='flex-1'>
           <Link to='/' className='font-bold dark:text-white text-4xl'>
-            <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white'>
-              Sahand's
+            <span className='px-2 py-1 bg-primary rounded-lg text-white'>
+              Omar
             </span>
-            Blog
+            Electro
           </Link>
           <p className='text-sm mt-5'>
             This is a demo project. You can sign in with your email and password

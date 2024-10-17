@@ -52,7 +52,7 @@ export default function UpdatedProduct() {
     try {
       const fetchProduct = async () => {
         const res = await fetch(
-          `/api/product/getproducts?productId=${productId}`
+          `${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?productId=${productId}`
         );
         const data = await res.json();
         if (!res.ok) {
@@ -138,7 +138,7 @@ export default function UpdatedProduct() {
     e.preventDefault();
     try {
       const res = await fetch(
-        `/api/product/updateproduct/${productId}/${currentUser._id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/product/updateproduct/${productId}/${currentUser._id}`,
         {
           method: "PUT",
           headers: {
@@ -166,7 +166,7 @@ export default function UpdatedProduct() {
   };
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch("/api/category/getcategories");
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category/getcategories`);
       const data = await res.json();
       if (res.ok) {
         setCategories(data);

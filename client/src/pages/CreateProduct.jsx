@@ -104,7 +104,7 @@ export default function CreateProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/product/create", {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/product/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -131,7 +131,7 @@ export default function CreateProduct() {
   };
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch("/api/category/getcategories");
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category/getcategories`);
       const data = await res.json();
       if (res.ok) {
         setCategories(data);

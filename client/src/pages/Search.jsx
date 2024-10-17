@@ -2,6 +2,7 @@ import { Button, Select, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ProductBox from "../components/Home/ProductBox";
+import Footer from "../components/Home/Footer";
 
 export default function Search() {
   const [sidebarData, setSidebarData] = useState({
@@ -35,7 +36,7 @@ export default function Search() {
     const fetchProducts = async () => {
       setLoading(true);
       const searchQuery = urlParams.toString();
-      const res = await fetch(`/api/product/getproducts?${searchQuery}`);
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?${searchQuery}`);
       if (!res.ok) {
         setLoading(false);
         return;
@@ -56,7 +57,7 @@ export default function Search() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch("/api/category/getcategories");
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category/getcategories`);
       const data = await res.json();
       if (res.ok) {
         setCategories(data);
@@ -96,7 +97,7 @@ export default function Search() {
     const urlParams = new URLSearchParams(location.search);
     urlParams.set("startIndex", startIndex);
     const searchQuery = urlParams.toString();
-    const res = await fetch(`/api/product/getproducts?${searchQuery}`);
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?${searchQuery}`);
     if (!res.ok) {
       return;
     }
@@ -113,6 +114,7 @@ export default function Search() {
 
 
   return (
+    <>
     <div className="flex flex-col md:flex-row">
       <div className="p-7 border-b md:border-r md:min-h-screen border-gray-500">
         <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
@@ -183,5 +185,7 @@ export default function Search() {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 }

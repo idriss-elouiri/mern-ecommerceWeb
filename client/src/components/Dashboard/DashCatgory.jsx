@@ -24,7 +24,7 @@ const DashCategories = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const res = await fetch("/api/category/getcategories");
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category/getcategories`);
       const data = await res.json();
       if (data.success === false) {
         setLoading(false);
@@ -50,7 +50,7 @@ const DashCategories = () => {
       })),
     };
     if (editedCategory) {
-      const res = await fetch(`/api/category/updatecategory/${editedCategory._id}`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category/updatecategory/${editedCategory._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -103,7 +103,7 @@ const DashCategories = () => {
   const deleteCategory = async (id) => {
     const savingPromise = new Promise(async (resolve, reject) => {
       try {
-        const res = await fetch(`/api/category/deletecategory/${id}`, {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category/deletecategory/${id}`, {
           method: "DELETE",
         });
         const data = await res.json();

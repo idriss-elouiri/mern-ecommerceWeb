@@ -13,7 +13,7 @@ export default function DashProducts() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch(`/api/product/getproducts?userId=${currentUser._id}`);
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?userId=${currentUser._id}`);
         const data = await res.json();
         if (res.ok) {
           setUserProducts(data.products);
@@ -34,7 +34,7 @@ export default function DashProducts() {
     const startIndex = userProducts.length;
     try {
       const res = await fetch(
-        `/api/product/getproducts?userId=${currentUser._id}&startIndex=${startIndex}`
+        `${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?userId=${currentUser._id}&startIndex=${startIndex}`
       );
       const data = await res.json();
       if (res.ok) {
@@ -52,7 +52,7 @@ export default function DashProducts() {
     setShowModal(false);
     try {
       const res = await fetch(
-        `/api/product/deleteproduct/${productIdToDelete}/${currentUser._id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/product/deleteproduct/${productIdToDelete}/${currentUser._id}`,
         {
           method: 'DELETE',
         }

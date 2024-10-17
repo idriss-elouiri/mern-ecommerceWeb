@@ -9,7 +9,7 @@ const Home = () => {
   const [products, setProducts] = useState([])
   useEffect(() => {
       const fetchProducts = async () => {
-      const res = await fetch("/api/product/getproducts")
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts`)
       const data = await res.json()
       if(res.ok){
           setProducts(data.products)

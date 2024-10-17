@@ -12,7 +12,7 @@ export default function DashOrders() {
   }, []);
   function fetchOrders() {
     setLoadingOrders(true);
-    fetch("/api/order/get").then((res) => {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/order/get`).then((res) => {
       res.json().then((orders) => {
         setOrders(orders.reverse());
         setLoadingOrders(false);

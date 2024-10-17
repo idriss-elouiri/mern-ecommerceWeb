@@ -47,7 +47,7 @@ const Cart = () => {
   async function proceedToCheckout(ev) {
     ev.preventDefault();
     
-    fetch('/api/checkout/create', {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/checkout/create`, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({

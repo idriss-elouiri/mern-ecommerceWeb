@@ -11,7 +11,7 @@ const Hero = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const res = await fetch(`/api/product/getproducts?limit=5`);
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?limit=5`);
       const data = await res.json();
       if (res.ok) {
         setProductsInfo(data.products);
