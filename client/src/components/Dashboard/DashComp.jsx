@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   HiAnnotation,
   HiArrowNarrowUp,
   HiDocumentText,
   HiOutlineUserGroup,
-} from 'react-icons/hi';
-import { Button, Table } from 'flowbite-react';
-import { Link } from 'react-router-dom';
+} from "react-icons/hi";
+import { Button, Table } from "flowbite-react";
+import { Link } from "react-router-dom";
 
 export default function DashboardComp() {
   const [users, setUsers] = useState([]);
@@ -23,7 +23,13 @@ export default function DashboardComp() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/getusers?limit=5`);
+        const res = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/api/user/getusers?limit=5`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
         const data = await res.json();
         if (res.ok) {
           setUsers(data.users);
@@ -36,7 +42,13 @@ export default function DashboardComp() {
     };
     const fetchProducts = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?limit=5`);
+        const res = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?limit=5`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
         const data = await res.json();
         if (res.ok) {
           setProducts(data.products);
@@ -49,7 +61,13 @@ export default function DashboardComp() {
     };
     const fetchComments = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/comment/getcomments?limit=5`);
+        const res = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/api/comment/getcomments?limit=5`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
         const data = await res.json();
         if (res.ok) {
           setComments(data.comments);
@@ -67,65 +85,67 @@ export default function DashboardComp() {
     }
   }, [currentUser]);
   return (
-    <div className='p-3 md:mx-auto'>
-      <div className='flex-wrap flex gap-4 justify-center'>
-        <div className='flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md'>
-          <div className='flex justify-between'>
-            <div className=''>
-              <h3 className='text-gray-500 text-md uppercase'>Total Users</h3>
-              <p className='text-2xl'>{totalUsers}</p>
+    <div className="p-3 md:mx-auto">
+      <div className="flex-wrap flex gap-4 justify-center">
+        <div className="flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md">
+          <div className="flex justify-between">
+            <div className="">
+              <h3 className="text-gray-500 text-md uppercase">Total Users</h3>
+              <p className="text-2xl">{totalUsers}</p>
             </div>
-            <HiOutlineUserGroup className='bg-teal-600  text-white rounded-full text-5xl p-3 shadow-lg' />
+            <HiOutlineUserGroup className="bg-teal-600  text-white rounded-full text-5xl p-3 shadow-lg" />
           </div>
-          <div className='flex  gap-2 text-sm'>
-            <span className='text-green-500 flex items-center'>
+          <div className="flex  gap-2 text-sm">
+            <span className="text-green-500 flex items-center">
               <HiArrowNarrowUp />
               {lastMonthUsers}
             </span>
-            <div className='text-gray-500'>Last month</div>
+            <div className="text-gray-500">Last month</div>
           </div>
         </div>
-        <div className='flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md'>
-          <div className='flex justify-between'>
-            <div className=''>
-              <h3 className='text-gray-500 text-md uppercase'>
+        <div className="flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md">
+          <div className="flex justify-between">
+            <div className="">
+              <h3 className="text-gray-500 text-md uppercase">
                 Total Comments
               </h3>
-              <p className='text-2xl'>{totalComments}</p>
+              <p className="text-2xl">{totalComments}</p>
             </div>
-            <HiAnnotation className='bg-indigo-600  text-white rounded-full text-5xl p-3 shadow-lg' />
+            <HiAnnotation className="bg-indigo-600  text-white rounded-full text-5xl p-3 shadow-lg" />
           </div>
-          <div className='flex  gap-2 text-sm'>
-            <span className='text-green-500 flex items-center'>
+          <div className="flex  gap-2 text-sm">
+            <span className="text-green-500 flex items-center">
               <HiArrowNarrowUp />
               {lastMonthComments}
             </span>
-            <div className='text-gray-500'>Last month</div>
+            <div className="text-gray-500">Last month</div>
           </div>
         </div>
-        <div className='flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md'>
-          <div className='flex justify-between'>
-            <div className=''>
-              <h3 className='text-gray-500 text-md uppercase'>Total Products</h3>
-              <p className='text-2xl'>{totalProducts}</p>
+        <div className="flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md">
+          <div className="flex justify-between">
+            <div className="">
+              <h3 className="text-gray-500 text-md uppercase">
+                Total Products
+              </h3>
+              <p className="text-2xl">{totalProducts}</p>
             </div>
-            <HiDocumentText className='bg-lime-600  text-white rounded-full text-5xl p-3 shadow-lg' />
+            <HiDocumentText className="bg-lime-600  text-white rounded-full text-5xl p-3 shadow-lg" />
           </div>
-          <div className='flex  gap-2 text-sm'>
-            <span className='text-green-500 flex items-center'>
+          <div className="flex  gap-2 text-sm">
+            <span className="text-green-500 flex items-center">
               <HiArrowNarrowUp />
               {lastMonthProducts}
             </span>
-            <div className='text-gray-500'>Last month</div>
+            <div className="text-gray-500">Last month</div>
           </div>
         </div>
       </div>
-      <div className='flex flex-wrap gap-4 py-3 mx-auto justify-center'>
-        <div className='flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
-          <div className='flex justify-between  p-3 text-sm font-semibold'>
-            <h1 className='text-center p-2'>Recent users</h1>
-            <Button outline gradientDuoTone='purpleToPink'>
-              <Link to={'/dashboard?tab=users'}>See all</Link>
+      <div className="flex flex-wrap gap-4 py-3 mx-auto justify-center">
+        <div className="flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800">
+          <div className="flex justify-between  p-3 text-sm font-semibold">
+            <h1 className="text-center p-2">Recent users</h1>
+            <Button outline gradientDuoTone="purpleToPink">
+              <Link to={"/dashboard?tab=users"}>See all</Link>
             </Button>
           </div>
           <Table hoverable>
@@ -135,13 +155,13 @@ export default function DashboardComp() {
             </Table.Head>
             {users &&
               users.map((user) => (
-                <Table.Body key={user._id} className='divide-y'>
-                  <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                <Table.Body key={user._id} className="divide-y">
+                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                     <Table.Cell>
                       <img
                         src={user.profilePicture}
-                        alt='user'
-                        className='w-10 h-10 rounded-full bg-gray-500'
+                        alt="user"
+                        className="w-10 h-10 rounded-full bg-gray-500"
                       />
                     </Table.Cell>
                     <Table.Cell>{user.name}</Table.Cell>
@@ -150,11 +170,11 @@ export default function DashboardComp() {
               ))}
           </Table>
         </div>
-        <div className='flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
-          <div className='flex justify-between  p-3 text-sm font-semibold'>
-            <h1 className='text-center p-2'>Recent comments</h1>
-            <Button outline gradientDuoTone='purpleToPink'>
-              <Link to={'/dashboard?tab=comments'}>See all</Link>
+        <div className="flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800">
+          <div className="flex justify-between  p-3 text-sm font-semibold">
+            <h1 className="text-center p-2">Recent comments</h1>
+            <Button outline gradientDuoTone="purpleToPink">
+              <Link to={"/dashboard?tab=comments"}>See all</Link>
             </Button>
           </div>
           <Table hoverable>
@@ -164,10 +184,10 @@ export default function DashboardComp() {
             </Table.Head>
             {comments &&
               comments.map((comment) => (
-                <Table.Body key={comment._id} className='divide-y'>
-                  <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                    <Table.Cell className='w-96'>
-                        <p className='line-clamp-2'>{comment.content}</p>
+                <Table.Body key={comment._id} className="divide-y">
+                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                    <Table.Cell className="w-96">
+                      <p className="line-clamp-2">{comment.content}</p>
                     </Table.Cell>
                     <Table.Cell>{comment.numberOfLikes}</Table.Cell>
                   </Table.Row>
@@ -175,11 +195,11 @@ export default function DashboardComp() {
               ))}
           </Table>
         </div>
-        <div className='flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
-          <div className='flex justify-between  p-3 text-sm font-semibold'>
-            <h1 className='text-center p-2'>Recent products</h1>
-            <Button outline gradientDuoTone='purpleToPink'>
-              <Link to={'/dashboard?tab=products'}>See all</Link>
+        <div className="flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800">
+          <div className="flex justify-between  p-3 text-sm font-semibold">
+            <h1 className="text-center p-2">Recent products</h1>
+            <Button outline gradientDuoTone="purpleToPink">
+              <Link to={"/dashboard?tab=products"}>See all</Link>
             </Button>
           </div>
           <Table hoverable>
@@ -190,17 +210,17 @@ export default function DashboardComp() {
             </Table.Head>
             {products &&
               products.map((product) => (
-                <Table.Body key={product._id} className='divide-y'>
-                  <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                <Table.Body key={product._id} className="divide-y">
+                  <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                     <Table.Cell>
                       <img
                         src={product.images[0]}
-                        alt='user'
-                        className='w-14 h-10 rounded-md bg-gray-500'
+                        alt="user"
+                        className="w-14 h-10 rounded-md bg-gray-500"
                       />
                     </Table.Cell>
-                    <Table.Cell className='w-96'>{product.title}</Table.Cell>
-                    <Table.Cell className='w-5'>{product.category}</Table.Cell>
+                    <Table.Cell className="w-96">{product.title}</Table.Cell>
+                    <Table.Cell className="w-5">{product.category}</Table.Cell>
                   </Table.Row>
                 </Table.Body>
               ))}

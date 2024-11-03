@@ -36,7 +36,10 @@ export default function Search() {
     const fetchProducts = async () => {
       setLoading(true);
       const searchQuery = urlParams.toString();
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?${searchQuery}`);
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?${searchQuery}`,{
+        method: "GET",
+        credentials: "include",
+      });
       if (!res.ok) {
         setLoading(false);
         return;
@@ -57,7 +60,10 @@ export default function Search() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category/getcategories`);
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category/getcategories`,{
+        method: "GET",
+        credentials: "include",
+      });
       const data = await res.json();
       if (res.ok) {
         setCategories(data);
@@ -97,7 +103,10 @@ export default function Search() {
     const urlParams = new URLSearchParams(location.search);
     urlParams.set("startIndex", startIndex);
     const searchQuery = urlParams.toString();
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?${searchQuery}`);
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?${searchQuery}`,{
+      method: "GET",
+      credentials: "include",
+    });
     if (!res.ok) {
       return;
     }

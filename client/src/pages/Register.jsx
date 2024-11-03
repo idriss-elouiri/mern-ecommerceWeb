@@ -21,6 +21,7 @@ export default function Register() {
       setErrorMessage(null);
       const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register`, {
         method: 'POST',
+        credentials: "include",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });

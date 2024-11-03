@@ -15,7 +15,10 @@ export default function Order() {
     const fetchOrder = async () => {
         if (id) {
           setLoadingOrder(true);
-          const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/order/get?_id=${id}`)
+          const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/order/get?_id=${id}`,{
+            method: "GET",
+            credentials: "include",
+          })
         const data = await res.json()
             setOrder(data)
             setLoadingOrder(false)

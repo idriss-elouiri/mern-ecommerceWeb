@@ -18,8 +18,14 @@ connectDb();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
-app.use(express.static("public"));
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL, // Your frontend origin
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 
 app.use("/api/auth", authRouter);
@@ -30,8 +36,13 @@ app.use("/api/category", categoryRouter);
 app.use("/api/checkout", checkoutRouter);
 app.use("/api/order", orderRouter);
 
-app.listen(3005, () => {
-  console.log("Server is running on port 3005!");
+app.get("/*", (req, res) => {
+  res.json("hello world");
+});
+
+const PORT = process.env.PORT || 3006;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
 app.use((err, req, res, next) => {

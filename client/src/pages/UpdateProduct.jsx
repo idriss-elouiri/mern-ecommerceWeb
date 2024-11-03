@@ -52,7 +52,10 @@ export default function UpdatedProduct() {
     try {
       const fetchProduct = async () => {
         const res = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?productId=${productId}`
+          `${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?productId=${productId}`, {
+            method: "GET",
+            credentials: "include",
+          }
         );
         const data = await res.json();
         if (!res.ok) {
@@ -141,6 +144,7 @@ export default function UpdatedProduct() {
         `${import.meta.env.VITE_BACKEND_URL}/api/product/updateproduct/${productId}/${currentUser._id}`,
         {
           method: "PUT",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
@@ -166,7 +170,10 @@ export default function UpdatedProduct() {
   };
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category/getcategories`);
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category/getcategories`,{
+        method: "GET",
+        credentials: "include",
+      });
       const data = await res.json();
       if (res.ok) {
         setCategories(data);

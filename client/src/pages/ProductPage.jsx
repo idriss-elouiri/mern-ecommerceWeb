@@ -7,7 +7,10 @@ const ProductPage = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts`);
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts`,{
+        method: "GET",
+        credentials: "include",
+      });
       const data = await res.json();
       if (res.ok) {
         setProductsInfo(data.products);
@@ -17,7 +20,10 @@ const ProductPage = () => {
   }, []);
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category/getcategories`);
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category/getcategories`,{
+        method: "GET",
+        credentials: "include",
+      });
       const data = await res.json();
       if (res.ok) {
         setCategories(data);

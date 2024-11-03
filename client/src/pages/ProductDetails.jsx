@@ -17,7 +17,10 @@ export default function ProductDetails() {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?slug=${productSlug}`);
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?slug=${productSlug}`,{
+          method: "GET",
+          credentials: "include",
+        });
         const data = await res.json();
         if (!res.ok) {
           setError(true);
@@ -40,7 +43,10 @@ export default function ProductDetails() {
   useEffect(() => {
     try {
       const fetchRecentProducts = async () => {
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?limit=4`);
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?limit=4`,{
+          method: "GET",
+          credentials: "include",
+        });
         const data = await res.json();
         if (res.ok) {
           setRecentProducts(data.products);

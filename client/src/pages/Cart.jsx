@@ -49,6 +49,7 @@ const Cart = () => {
     
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/checkout/create`, {
       method: 'POST',
+      credentials: "include",
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
         address,

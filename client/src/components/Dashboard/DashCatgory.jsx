@@ -24,7 +24,10 @@ const DashCategories = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category/getcategories`);
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category/getcategories`,{
+        method: "GET",
+        credentials: "include",
+      });
       const data = await res.json();
       if (data.success === false) {
         setLoading(false);
@@ -52,6 +55,7 @@ const DashCategories = () => {
     if (editedCategory) {
       const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category/updatecategory/${editedCategory._id}`, {
         method: "PUT",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -70,6 +74,7 @@ const DashCategories = () => {
     } else {
       const res = await fetch("/api/category/create", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -105,6 +110,7 @@ const DashCategories = () => {
       try {
         const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category/deletecategory/${id}`, {
           method: "DELETE",
+          credentials: "include",
         });
         const data = await res.json();
         if (data.success === false) {
