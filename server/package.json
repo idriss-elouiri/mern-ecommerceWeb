@@ -14,7 +14,7 @@
     "api",
     "mongoose"
   ],
-  "author": "Your Name",
+  "author": "idriss",
   "license": "ISC",
   "description": "A Node.js server for handling user authentication and product management.",
   "dependencies": {
