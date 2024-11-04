@@ -5,71 +5,76 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SK);
 
 export async function create(req, res) {
-  const { cartProducts, address } = req.body;
-  const userEmail = req.user.email;
+  try {
+    const { cartProducts, address } = req.body;
+    const userEmail = req.user.email;
 
-  if (!cartProducts) {
-    throw new Error("No products found in the cart.");
-  }
+    // Check for cartProducts
+    if (!cartProducts || cartProducts.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "No products found in the cart." });
+    }
 
-  const productsArray = Array.isArray(cartProducts)
-    ? cartProducts
-    : [cartProducts];
+    const productsArray = Array.isArray(cartProducts)
+      ? cartProducts
+      : [cartProducts];
 
-  const orderDoc = await Order.create({
-    userEmail,
-    ...address,
-    cartProducts,
-    paid: false,
-  });
-
-  const stripeLineItems = [];
-
-  for (const cartProduct of cartProducts) {
-    const productInfo = await Product.findById(cartProduct._id);
-
-    let productPrice = productInfo.price;
-
-    const productName = cartProduct.title;
-
-    productPrice = Math.round(productPrice);
-
-
-    stripeLineItems.push({
-      quantity: 1,
-      price_data: {
-        currency: "USD",
-        product_data: {
-          name: productName,
-        },
-        unit_amount: productPrice * 100,
-      },
+    // Create an order document
+    const orderDoc = await Order.create({
+      userEmail,
+      ...address,
+      cartProducts: productsArray,
+      paid: false,
     });
-  }
 
-  const stripeSession = await stripe.checkout.sessions.create({
-    line_items: stripeLineItems,
-    mode: "payment",
-    customer_email: userEmail,
-    success_url:
-      "http://localhost:5173/" +
-      "order/" +
-      orderDoc._id.toString() +
-      "?clear-cart=1",
-    cancel_url: "http://localhost:5173/" + "cart?canceled=1",
-    metadata: { orderId: orderDoc._id.toString() },
-    payment_intent_data: {
+    const stripeLineItems = await Promise.all(
+      productsArray.map(async (cartProduct) => {
+        const productInfo = await Product.findById(cartProduct._id);
+        if (!productInfo) {
+          throw new Error(`Product not found for ID: ${cartProduct._id}`);
+        }
+
+        return {
+          quantity: 1,
+          price_data: {
+            currency: "USD",
+            product_data: {
+              name: cartProduct.title,
+            },
+            unit_amount: Math.round(productInfo.price) * 100, // Convert to cents
+          },
+        };
+      })
+    );
+
+    // Create a Stripe checkout session
+    const stripeSession = await stripe.checkout.sessions.create({
+      line_items: stripeLineItems,
+      mode: "payment",
+      customer_email: userEmail,
+      success_url: `http://localhost:5173/order/${orderDoc._id}?clear-cart=1`,
+      cancel_url: "http://localhost:5173/cart?canceled=1",
       metadata: { orderId: orderDoc._id.toString() },
-    },
-    shipping_options: [
-      {
-        shipping_rate_data: {
-          display_name: "Delivery fee",
-          type: "fixed_amount",
-          fixed_amount: { amount: 500, currency: "USD" },
-        },
+      payment_intent_data: {
+        metadata: { orderId: orderDoc._id.toString() },
       },
-    ],
-  });
-  res.status(200).json(stripeSession.url);
+      shipping_options: [
+        {
+          shipping_rate_data: {
+            display_name: "Delivery fee",
+            type: "fixed_amount",
+            fixed_amount: { amount: 500, currency: "USD" },
+          },
+        },
+      ],
+    });
+
+    return res.status(200).json({ url: stripeSession.url });
+  } catch (error) {
+    console.error("Error creating order:", error);
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
 }

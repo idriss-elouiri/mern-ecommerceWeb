@@ -1,58 +1,11 @@
-import React, { useEffect, useState } from "react";
-import ProductBox from "../components/Home/ProductBox";
+import React from "react";
+import ProductComp from "../components/product/ProductComp";
 
 const ProductPage = () => {
-  const [productsInfo, setProductsInfo] = useState([]);
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts`,{
-        method: "GET",
-        credentials: "include",
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setProductsInfo(data.products);
-      }
-    };
-    fetchProducts();
-  }, []);
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/category/getcategories`,{
-        method: "GET",
-        credentials: "include",
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setCategories(data);
-      }
-    };
-    fetchData();
-  }, []);
-
   return (
-    <section className="px-10 mt-20 md:mt-10">
-      {categories.map((categoryName) => (
-        <div key={categoryName._id}>
-          {productsInfo.find((p) => p.category === categoryName._id) && (
-            <div>
-              <h2 className="text-2xl py-5 capitalize">{categoryName.name}</h2>
-              <div className="flex -mx-5 overflow-x-scroll snap-x scrollbar-hide">
-                {productsInfo
-                  .filter((p) => p.category === categoryName._id)
-                  .map((productInfo) => (
-                    <div key={productInfo._id} className="px-5 snap-start">
-                      <ProductBox productInfo={productInfo} />
-                    </div>
-                  ))}
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
-    </section>
+    <>
+      <ProductComp />
+    </>
   );
 };
 

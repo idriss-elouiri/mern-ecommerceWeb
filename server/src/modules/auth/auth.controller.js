@@ -42,10 +42,11 @@ export const loginHandler = async (req, res, next) => {
 
     const { password: pass, ...rest } = validUser._doc;
 
-    return res.status(200)
+    return res
+      .status(200)
       .cookie("access_token", token, {
         httpOnly: true,
-        secure: false, // تأكد من تعيين secure بناءً على البيئة (false في بيئة التطوير)
+        secure: false,
       })
       .json(rest);
   } catch (error) {
@@ -53,10 +54,9 @@ export const loginHandler = async (req, res, next) => {
   }
 };
 
-
 export const googleHandler = async (req, res, next) => {
   const { email, name, googlePhotoUrl } = req.body;
-  
+
   try {
     const user = await User.findOne({ email });
     let token, newUser;
@@ -67,11 +67,12 @@ export const googleHandler = async (req, res, next) => {
         process.env.JWT_SECRET
       );
       const { password, ...rest } = user._doc;
-      return res.status(200)
+      return res
+        .status(200)
         .cookie("access_token", token, {
           httpOnly: true,
         })
-        .json(rest); // Return here to prevent further execution
+        .json(rest);
     } else {
       const generatedPassword =
         Math.random().toString(36).slice(-8) +
@@ -91,13 +92,14 @@ export const googleHandler = async (req, res, next) => {
         process.env.JWT_SECRET
       );
       const { password, ...rest } = newUser._doc;
-      return res.status(200)
+      return res
+        .status(200)
         .cookie("access_token", token, {
           httpOnly: true,
         })
-        .json(rest); // Return here to prevent further execution
+        .json(rest);
     }
   } catch (error) {
-    next(error); // Pass the error to the next middleware (error handler)
+    next(error);
   }
 };

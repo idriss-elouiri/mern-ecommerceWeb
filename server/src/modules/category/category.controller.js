@@ -1,10 +1,13 @@
 import Category from "./category.model.js";
+import { errorHandler } from "../../utils/error.js";
 
-export async function createcateg(req, res, next) {
+export async function createCategory(req, res, next) {
   const { name, parent, properties } = req.body;
+
   if (!req.user.isAdmin) {
     return next(errorHandler(403, "You are not allowed to create a category"));
   }
+
   try {
     const newCategory = new Category({
       userId: req.user.id,
@@ -18,20 +21,23 @@ export async function createcateg(req, res, next) {
     next(error);
   }
 }
-export async function getcategories(req, res, next) {
+
+export async function getCategories(req, res, next) {
   try {
     const categories = await Category.find().populate("parent");
-    res.status(201).json(categories);
+    res.status(200).json(categories); // Use 200 for successful GET
   } catch (error) {
     next(error);
   }
 }
 
-export async function updatedcateg(req, res, next) {
+export async function updateCategory(req, res, next) {
   const { name, parent, properties } = req.body;
 
   if (!req.user.isAdmin) {
-    return next(errorHandler(403, "You are not allowed to create a category"));
+    return next(
+      errorHandler(403, "You are not allowed to update this category")
+    );
   }
 
   try {
@@ -44,22 +50,32 @@ export async function updatedcateg(req, res, next) {
           properties,
         },
       },
-      { new: true }
+      { new: true, runValidators: true } // Ensure validation on update
     );
+
+    if (!updatedCategory) {
+      return next(errorHandler(404, "Category Not Found")); // Handle case where category doesn't exist
+    }
+
     res.status(200).json(updatedCategory);
   } catch (error) {
     next(error);
   }
 }
 
-export async function deletecatg(req, res, next) {
+export async function deleteCategory(req, res, next) {
   if (!req.user.isAdmin) {
-    return next(errorHandler(403, "You are not allowed to create a category"));
+    return next(
+      errorHandler(403, "You are not allowed to delete this category")
+    );
   }
+
   try {
-    const deletedCategory = await Category.findByIdAndDelete(req.params.categoryId);
+    const deletedCategory = await Category.findByIdAndDelete(
+      req.params.categoryId
+    );
     if (!deletedCategory) {
-      return next(errorHandler(400, "Category Not Found"));
+      return next(errorHandler(404, "Category Not Found"));
     }
     res.status(200).json("Category deleted successfully");
   } catch (error) {

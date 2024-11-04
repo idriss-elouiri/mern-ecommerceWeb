@@ -2,7 +2,6 @@ import { Modal, Table, Button } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
-import { FaCheck, FaTimes } from "react-icons/fa";
 
 export default function DashComments() {
   const { currentUser } = useSelector((state) => state.user);
@@ -10,33 +9,14 @@ export default function DashComments() {
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [commentIdToDelete, setCommentIdToDelete] = useState("");
+
   useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const res = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/comment/getcomments`,{
-            method: "GET",
-            credentials: "include",
-          }
-        );
-        const data = await res.json();
-        if (res.ok) {
-          setComments(data.comments);
-          if (data.comments.length < 9) {
-            setShowMore(false);
-          }
-        }
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
     if (currentUser.isAdmin) {
       fetchComments();
     }
-  }, [currentUser._id]);
+  }, [currentUser]);
 
-  const handleShowMore = async () => {
-    const startIndex = comments.length;
+  const fetchComments = async (startIndex = 0) => {
     try {
       const res = await fetch(
         `${
@@ -50,17 +30,20 @@ export default function DashComments() {
       const data = await res.json();
       if (res.ok) {
         setComments((prev) => [...prev, ...data.comments]);
-        if (data.comments.length < 9) {
-          setShowMore(false);
-        }
+        setShowMore(data.comments.length === 9); // Assume 9 is the limit for pagination
+      } else {
+        console.error(data.message);
       }
     } catch (error) {
-      console.log(error.message);
+      console.error("Error fetching comments:", error.message);
     }
   };
 
+  const handleShowMore = () => {
+    fetchComments(comments.length);
+  };
+
   const handleDeleteComment = async () => {
-    setShowModal(false);
     try {
       const res = await fetch(
         `${
@@ -71,17 +54,18 @@ export default function DashComments() {
           credentials: "include",
         }
       );
-      const data = await res.json();
       if (res.ok) {
         setComments((prev) =>
           prev.filter((comment) => comment._id !== commentIdToDelete)
         );
-        setShowModal(false);
       } else {
-        console.log(data.message);
+        const data = await res.json();
+        console.error(data.message);
       }
     } catch (error) {
-      console.log(error.message);
+      console.error("Error deleting comment:", error.message);
+    } finally {
+      setShowModal(false);
     }
   };
 
@@ -98,9 +82,12 @@ export default function DashComments() {
               <Table.HeadCell>UserId</Table.HeadCell>
               <Table.HeadCell>Delete</Table.HeadCell>
             </Table.Head>
-            {comments.map((comment) => (
-              <Table.Body className="divide-y" key={comment._id}>
-                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+            <Table.Body className="divide-y">
+              {comments.map((comment) => (
+                <Table.Row
+                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                  key={comment._id}
+                >
                   <Table.Cell>
                     {new Date(comment.updatedAt).toLocaleDateString()}
                   </Table.Cell>
@@ -111,8 +98,8 @@ export default function DashComments() {
                   <Table.Cell>
                     <span
                       onClick={() => {
-                        setShowModal(true);
                         setCommentIdToDelete(comment._id);
+                        setShowModal(true);
                       }}
                       className="font-medium text-red-500 hover:underline cursor-pointer"
                     >
@@ -120,8 +107,8 @@ export default function DashComments() {
                     </span>
                   </Table.Cell>
                 </Table.Row>
-              </Table.Body>
-            ))}
+              ))}
+            </Table.Body>
           </Table>
           {showMore && (
             <button

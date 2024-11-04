@@ -1,129 +1,60 @@
 import { Sidebar } from "flowbite-react";
-import {
-  HiUser,
-  HiArrowSmRight,
-  HiDocumentText,
-  HiOutlineUserGroup,
-  HiAnnotation,
-  HiChartPie,
-} from "react-icons/hi";
+import { HiUser, HiArrowSmRight, HiDocumentText, HiOutlineUserGroup, HiAnnotation, HiChartPie } from "react-icons/hi";
 import { CgShoppingCart } from "react-icons/cg";
 import { IoIosSettings } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { signoutSuccess } from "../../redux/user/userSlice";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
 
 export default function DashSidebar() {
   const location = useLocation();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
-  const [tab, setTab] = useState("");
+  const [activeTab, setActiveTab] = useState("");
+
   useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    const tabFromUrl = urlParams.get("tab");
-    if (tabFromUrl) {
-      setTab(tabFromUrl);
-    }
+    const tabFromUrl = new URLSearchParams(location.search).get("tab");
+    if (tabFromUrl) setActiveTab(tabFromUrl);
   }, [location.search]);
+
   const handleSignout = async () => {
     try {
       const res = await fetch("/api/user/signout", {
         method: "POST",
         credentials: "include",
       });
-      const data = await res.json();
-      if (!res.ok) {
-        console.log(data.message);
-      } else {
-        dispatch(signoutSuccess());
-      }
+      if (res.ok) dispatch(signoutSuccess());
+      else console.log("Failed to sign out");
     } catch (error) {
-      console.log(error.message);
+      console.log("Signout error:", error.message);
     }
   };
+
+  const sidebarItems = [
+    { label: "Dashboard", icon: HiChartPie, tab: "dash", adminOnly: true },
+    { label: "Profile", icon: HiUser, tab: "profile", labelColor: currentUser?.isAdmin ? "Admin" : "User" },
+    { label: "Products", icon: HiDocumentText, tab: "products", adminOnly: true },
+    { label: "Users", icon: HiOutlineUserGroup, tab: "users", adminOnly: true },
+    { label: "Comments", icon: HiAnnotation, tab: "comments", adminOnly: true },
+    { label: "Categories", icon: IoIosSettings, tab: "categories", adminOnly: true },
+    { label: "Orders", icon: CgShoppingCart, tab: "orders", adminOnly: true },
+  ];
+
   return (
     <Sidebar className="w-full md:w-56">
       <Sidebar.Items>
         <Sidebar.ItemGroup className="flex flex-col gap-1">
-          {currentUser && currentUser.isAdmin && (
-            <Link to="/dashboard?tab=dash">
-              <Sidebar.Item
-                active={tab === "dash" || !tab}
-                icon={HiChartPie}
-                as="div"
-              >
-                Dashboard
-              </Sidebar.Item>
-            </Link>
-          )}
-          <Link to="/dashboard?tab=profile">
-            <Sidebar.Item
-              active={tab === "profile"}
-              icon={HiUser}
-              label={currentUser.isAdmin ? "Admin" : "User"}
-              labelColor="dark"
-              as="div"
-            >
-              Profile
-            </Sidebar.Item>
-          </Link>
-          {currentUser.isAdmin && (
-            <>
-              <Link to="/dashboard?tab=products">
-                <Sidebar.Item
-                  active={tab === "products"}
-                  icon={HiDocumentText}
-                  as="div"
-                >
-                  Products
+          {sidebarItems.map(({ label, icon, tab, adminOnly = false, labelColor }) => (
+            (!adminOnly || currentUser?.isAdmin) && (
+              <Link key={tab} to={`/dashboard?tab=${tab}`}>
+                <Sidebar.Item active={activeTab === tab || (!activeTab && tab === "dash")} icon={icon} as="div">
+                  {label}
                 </Sidebar.Item>
               </Link>
-              <Link to="/dashboard?tab=users">
-                <Sidebar.Item
-                  active={tab === "users"}
-                  icon={HiOutlineUserGroup}
-                  as="div"
-                >
-                  Users
-                </Sidebar.Item>
-              </Link>
-              <Link to="/dashboard?tab=comments">
-                <Sidebar.Item
-                  active={tab === "comments"}
-                  icon={HiAnnotation}
-                  as="div"
-                >
-                  Comments
-                </Sidebar.Item>
-              </Link>
-              <Link to="/dashboard?tab=categories">
-                <Sidebar.Item
-                  active={tab === "categories"}
-                  icon={IoIosSettings}
-                  as="div"
-                >
-                  Categories
-                </Sidebar.Item>
-              </Link>
-
-              <Link to="/dashboard?tab=orders">
-                <Sidebar.Item
-                  active={tab === "orders"}
-                  icon={CgShoppingCart}
-                  as="div"
-                >
-                  Orders
-                </Sidebar.Item>
-              </Link>
-            </>
-          )}
-          <Sidebar.Item
-            icon={HiArrowSmRight}
-            className="cursor-pointer"
-            onClick={handleSignout}
-          >
+            )
+          ))}
+          <Sidebar.Item icon={HiArrowSmRight} className="cursor-pointer" onClick={handleSignout}>
             Sign Out
           </Sidebar.Item>
         </Sidebar.ItemGroup>

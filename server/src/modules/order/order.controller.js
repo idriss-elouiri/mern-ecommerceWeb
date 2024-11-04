@@ -1,21 +1,31 @@
 import Order from "./order.model.js";
 
-export async function getorder(req, res, next) {
-  const userEmail = req.user.email;
+export async function getOrder(req, res, next) {
+  try {
+    const userEmail = req.user.email;
+    const { _id } = req.query;
 
-  const _id = req.query._id;
-  if (_id) {
-    const orderId = await Order.findById(_id)
-    return res.status(200).json(orderId);
-  }
+    if (_id) {
+      const order = await Order.findById(_id);
+      if (!order) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+      return res.status(200).json(order);
+    }
 
-  if (req.user.isAdmin) {
-    const orders = await Order.find()
-    return res.status(201).json(orders);
-  }
+    if (req.user.isAdmin) {
+      const orders = await Order.find();
+      return res.status(200).json(orders);
+    }
 
-  if (userEmail) {
-    const order = await Order.find({userEmail})
-    return res.status(202).json(order);
+    if (userEmail) {
+      const orders = await Order.find({ userEmail });
+      return res.status(200).json(orders);
+    }
+
+    return res.status(400).json({ message: "No orders found" });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 }

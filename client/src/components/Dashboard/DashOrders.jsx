@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
+
 const pageSize = 10; // Number of orders per page
 
 export default function DashOrders() {
@@ -10,106 +11,86 @@ export default function DashOrders() {
   useEffect(() => {
     fetchOrders();
   }, []);
-  function fetchOrders() {
+
+  const fetchOrders = async () => {
     setLoadingOrders(true);
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/order/get`, {
-      method: "GET",
-      credentials: "include",
-    }).then((res) => {
-      res.json().then((orders) => {
-        setOrders(orders.reverse());
-        setLoadingOrders(false);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/order/get`, {
+        method: "GET",
+        credentials: "include",
       });
-    });
-  }
-  // Calculate the total number of pages
+      const data = await response.json();
+      if (response.ok) {
+        setOrders(data.reverse()); // Reverse orders for recent first
+      } else {
+        console.error("Failed to fetch orders:", data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching orders:", error.message);
+    } finally {
+      setLoadingOrders(false);
+    }
+  };
+
+  // Pagination logic
   const totalPages = Math.ceil(orders.length / pageSize);
-  // Calculate the start and end index for the current page
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(currentPage * pageSize, orders.length);
-
   const ordersToDisplay = orders.slice(startIndex, endIndex);
 
   const changePage = (page) => {
     setCurrentPage(page);
   };
+
   return (
-      <div className="flex flex-col w-full">
-        <header>
-          <div className="my-10 text-center w-full">
-            <h1 className="text-3xl font-bold text-gray-900 sm:text-3xl">
-              All Orders
-            </h1>
-          </div>
-          <hr className="my-8 h-px border-0 bg-gray-300" />
-        </header>
-        <div className="overflow-x-auto mx-auto px-4 w-full">
-          {loadingOrders && <div>Loading orders...</div>}{" "}
-          {!loadingOrders && orders.length === 0 && (
-            <p className="w-full text-center text-xl font-semibold">
-              No orders available.
-            </p>
-          )}
+    <div className="flex flex-col w-full">
+      <header>
+        <div className="my-10 text-center w-full">
+          <h1 className="text-3xl font-bold text-gray-900 sm:text-3xl">All Orders</h1>
+        </div>
+        <hr className="my-8 h-px border-0 bg-gray-300" />
+      </header>
+      <div className="overflow-x-auto mx-auto px-4 w-full">
+        {loadingOrders ? (
+          <div>Loading orders...</div>
+        ) : orders.length === 0 ? (
+          <p className="w-full text-center text-xl font-semibold">No orders available.</p>
+        ) : (
           <>
-            <table className="min-w-full divide-y-2 divide-gray-200 bg-white text-md  border rounded">
+            <table className="min-w-full divide-y-2 divide-gray-200 bg-white text-md border rounded">
               <thead>
                 <tr>
-                  <th className="whitespace-nowrap px-4 py-2 text-gray-900 text-start font-bold">
-                    Paid
-                  </th>
-                  <th className="whitespace-nowrap px-4 py-2 text-gray-900 text-start font-bold">
-                    User Name
-                  </th>
-                  <th className="whitespace-nowrap px-4 py-2 text-gray-900 text-start font-bold">
-                    createdAt
-                  </th>
+                  <th className="whitespace-nowrap px-4 py-2 text-gray-900 text-start font-bold">Paid</th>
+                  <th className="whitespace-nowrap px-4 py-2 text-gray-900 text-start font-bold">User Name</th>
+                  <th className="whitespace-nowrap px-4 py-2 text-gray-900 text-start font-bold">Created At</th>
+                  <th className="whitespace-nowrap px-4 py-2 text-gray-900 text-start font-bold">Actions</th>
                 </tr>
               </thead>
-              {ordersToDisplay.map((order, index) => (
-                <tbody className="divide-y divide-gray-200" key={order._id}>
-                  <tr>
+              <tbody className="divide-y divide-gray-200">
+                {ordersToDisplay.map((order) => (
+                  <tr key={order._id}>
                     <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                      <div>
-                        <div
-                          className={
-                            (order.paid ? "bg-emerald-500" : "bg-red-400") +
-                            " p-2 rounded-md text-white w-24 text-center"
-                          }
-                        >
-                          {order.paid ? "Paid" : "Not paid"}
-                        </div>
+                      <div className={`p-2 rounded-md text-white w-24 text-center ${order.paid ? 'bg-emerald-500' : 'bg-red-400'}`}>
+                        {order.paid ? "Paid" : "Not paid"}
                       </div>
                     </td>
-                    <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900 flex items-center  gap-1">
-                      <div className="grow">
-                        <div className="flex gap-2 items-center mb-1">
-                          <div className="grow">{order.userEmail}</div>
-                        </div>
-                        <div className="text-gray-500 text-xs">
+                    <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                      <div className="flex flex-col">
+                        <span>{order.userEmail}</span>
+                        <span className="text-gray-500 text-xs">
                           {order.cartProducts.map((p) => p.title).join(", ")}
-                        </div>
+                        </span>
                       </div>
                     </td>
-                    <td>
-                      <div className="text-gray-500 text-sm">
-                        {order.createdAt}
-                      </div>
-                    </td>
-                    <td>
-                      {" "}
-                      <div className="justify-end flex gap-2 items-center whitespace-nowrap">
-                        <Link
-                          to={"/order/" + order._id}
-                          className="button"
-                        >
-                          Show order
-                        </Link>
-                      </div>
+                    <td className="whitespace-nowrap px-4 py-2 text-gray-500 text-sm">{new Date(order.createdAt).toLocaleDateString()}</td>
+                    <td className="justify-end flex gap-2 items-center whitespace-nowrap">
+                      <Link to={`/order/${order._id}`} className="button">Show order</Link>
                     </td>
                   </tr>
-                </tbody>
-              ))}
+                ))}
+              </tbody>
             </table>
+
             {/* Pagination controls */}
             {totalPages > 1 && (
               <div className="flex justify-center mt-4">
@@ -118,9 +99,7 @@ export default function DashOrders() {
                     key={i}
                     onClick={() => changePage(i + 1)}
                     className={`mx-2 px-3 py-2 rounded ${
-                      i + 1 === currentPage
-                        ? "bg-blue-300 text-slate-900"
-                        : "bg-gray-200 hover:bg-gray-300"
+                      i + 1 === currentPage ? "bg-blue-300 text-slate-900" : "bg-gray-200 hover:bg-gray-300"
                     }`}
                   >
                     {i + 1}
@@ -129,7 +108,8 @@ export default function DashOrders() {
               </div>
             )}
           </>
-        </div>
+        )}
       </div>
+    </div>
   );
 }
