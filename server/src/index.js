@@ -18,9 +18,6 @@ dotenv.config();
 
 connectDb();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
@@ -48,10 +45,7 @@ app.get("/health", (req, res) => {
   res.status(200).json({ status: "OK" });
 });
 
-// Fallback route
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/client/dist/index.html"));
-});
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {

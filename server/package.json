@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/index.js",
-    "start": "node src/index.js",
-    "build": "npm install --perfix ./client && npm run build --perfix ./client && npm install"
+    "start": "node src/index.js"
   },
   "keywords": [
     "node",
