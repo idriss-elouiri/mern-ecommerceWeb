@@ -10,10 +10,16 @@ import checkoutRouter from "./modules/checkout/checkout.route.js";
 import orderRouter from "./modules/order/order.route.js";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+import path from "path";
+
 const app = express();
 dotenv.config();
 
 connectDb();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Middleware
 app.use(express.json());
@@ -26,6 +32,7 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+app.use(express.static(path.join(__dirname, "/client/dist")));
 
 // Routes
 app.use("/api/auth", authRouter);
@@ -42,8 +49,8 @@ app.get("/health", (req, res) => {
 });
 
 // Fallback route
-app.get("/*", (req, res) => {
-  res.json("hello world");
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/client/dist/index.html"));
 });
 
 // Error handling middleware
@@ -58,7 +65,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 3006;
+const PORT = process.env.PORT || 3004;
 const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

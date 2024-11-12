@@ -6,34 +6,48 @@ const ProductComp = () => {
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState(null);
 
-  const fetchData = async (url, setState) => {
-    try {
-      const res = await fetch(url, {
-        method: "GET",
-        credentials: "include",
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
-      setState(data);
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
   useEffect(() => {
-    fetchData(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts`, setProductsInfo);
-    fetchData(`${import.meta.env.VITE_BACKEND_URL}/api/category/getcategories`, setCategories);
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts`
+        );
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message);
+        setProductsInfo(data.products);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/api/category/getcategories`
+        );
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message);
+        setCategories(data);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+    fetchProducts();
+    fetchCategories();
   }, []);
 
   const renderProductsByCategory = (category) => {
-    const filteredProducts = productsInfo.filter(product => product.category === category._id);
+    // Check if productsInfo is an array before filtering
+    const filteredProducts = Array.isArray(productsInfo)
+      ? productsInfo.filter((product) => product.category === category._id)
+      : [];
+
     if (filteredProducts.length === 0) return null;
 
     return (
       <div key={category._id}>
         <h2 className="text-2xl py-5 capitalize">{category.name}</h2>
         <div className="flex -mx-5 overflow-x-scroll snap-x scrollbar-hide">
-          {filteredProducts.map(product => (
+          {filteredProducts.map((product) => (
             <div key={product._id} className="px-5 snap-start">
               <ProductBox productInfo={product} />
             </div>

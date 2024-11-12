@@ -17,20 +17,31 @@ const ProductDetailsComp = () => {
     try {
       setLoading(true);
       const response = await fetch(url, {
-         method: "GET",
+        method: "GET",
         credentials: "include",
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Failed to fetch data");
-      setter(data.products || data);
+
+      // Check if products is an array and extract the first product
+      if (
+        data.products &&
+        Array.isArray(data.products) &&
+        data.products.length > 0
+      ) {
+        setter(data.products[0]); // Assuming you want the first product
+      } else {
+        setter(data); // Handle other cases or errors accordingly
+      }
     } catch (error) {
-      setError(error.message);
+      setError(error.message); // Set error message if an error occurs
     } finally {
-      setLoading(false);
+      setLoading(false); // Ensure loading is set to false after fetch
     }
   };
 
   useEffect(() => {
+    // Fetch the product details and recent products when productSlug changes
     fetchData(
       `${
         import.meta.env.VITE_BACKEND_URL
@@ -58,11 +69,16 @@ const ProductDetailsComp = () => {
       </div>
     );
   }
-
+  console.log(product);
+  console.log(product.title);
   return (
     <>
       <main className="p-3 flex flex-col max-w-6xl mx-auto min-h-screen">
-        {product && <DetailsProductComp product={product} />}
+        {product ? ( // Check if product is available
+          <DetailsProductComp product={product} />
+        ) : (
+          <p className="text-red-500">Product not found.</p> // Display message if product is not found
+        )}
         <CommentSection productId={product?._id} />
         <div className="flex flex-wrap gap-5 mt-5 justify-center">
           {recentProducts.length > 0 && (

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const DetailsProductComp = ({ product }) => {
   const [showMore, setShowMore] = useState({});
-  const [activeImg, setActiveImage] = useState(product.images[0]);
+  const [activeImg, setActiveImage] = useState(product?.images?.[0] ); // Fallback to an empty string if images is missing
   const [amount, setAmount] = useState(1);
 
   const toggleShowMore = (id) => {
@@ -12,8 +12,8 @@ const DetailsProductComp = ({ product }) => {
     }));
   };
 
+  console.log(product.price)
   if (!product) return null; // Early return if no product
-
   return (
     <section className="container py-20 md:py-5">
       <div className="flex flex-col justify-between lg:flex-row gap-16 lg:items-center">
@@ -26,17 +26,19 @@ const DetailsProductComp = ({ product }) => {
               className="h-full object-cover"
             />
           </div>
-          <div className="flex flex-row justify-center items-center gap-5 border w-full h-[130px] border">
-            {product.images?.map((url, index) => (
-              <img
-                key={index} // Ensure each image has a unique key
-                src={url}
-                alt={product.title} // Improve accessibility
-                className="h-full w-[100px] rounded-md cursor-pointer object-contain"
-                onClick={() => setActiveImage(url)}
-              />
-            ))}
-          </div>
+          {product.images && product.images.length > 0 && ( // Render only if images exist
+            <div className="flex flex-row justify-center items-center gap-5 border w-full h-[130px] border">
+              {product.images.map((url, index) => (
+                <img
+                  key={index} // Ensure each image has a unique key
+                  src={url}
+                  alt={product.title} // Improve accessibility
+                  className="h-full w-[100px] rounded-md cursor-pointer object-contain"
+                  onClick={() => setActiveImage(url)}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* About Section */}
@@ -46,8 +48,8 @@ const DetailsProductComp = ({ product }) => {
           <div
             dangerouslySetInnerHTML={{
               __html: showMore[product._id]
-                ? product.content
-                : `${product.content.substring(0, 1000)}...`,
+                ? product.content || "" // Use empty string if content is undefined
+                : `${(product.content || "").substring(0, 1000)}...`, // Safe substring call
             }}
           />
           <button onClick={() => toggleShowMore(product._id)}>

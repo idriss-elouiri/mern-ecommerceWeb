@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "start:prod": "node --max_old_space_size=4096 src/index.js"
+    "build": "npm install --perfix ./client && npm run build --perfix ./client && npm install"
   },
   "keywords": [
     "node",
@@ -29,7 +29,9 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.0",
     "nodemon": "^3.1.7",
+    "path": "^0.12.7",
     "stripe": "^16.5.0",
+    "url": "^0.11.4",
     "zod": "^3.23.8"
   }
 }

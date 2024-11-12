@@ -10,7 +10,7 @@ const ProductBox = React.memo(({ productInfo }) => {
   const toggleShowMore = () => setShowMore((prev) => !prev);
 
   return (
-    <div className="w-[250px] border rounded-xl p-2 shadow-md hover:shadow-lg transition-shadow duration-300">
+    <div className="w-[300px] border rounded-xl p-2 shadow-md hover:shadow-lg transition-shadow duration-300">
       <div className="bg-slate-100 p-2 rounded-xl">
         <Link to={`/product-details/${productInfo.slug}`}>
           {productInfo.images[0] ? (
@@ -28,10 +28,10 @@ const ProductBox = React.memo(({ productInfo }) => {
       </div>
       <div className="mt-2">
         <Link to={`/product-details/${productInfo.slug}`}>
-          <h3 className="font-bold text-lg">{productInfo.title}</h3>
+          <h3 className="font-bold text-[14px]">{productInfo.title}</h3>
         </Link>
       </div>
-      <p className="text-sm mt-1 leading-4 text-gray-500 line-clamp-3">
+      <p className="text-sm my-4 leading-4 text-gray-500 line-clamp-3">
         {showMore
           ? productInfo.briefDesc
           : `${productInfo.briefDesc.substring(0, 100)}...`}{" "}
