@@ -10,8 +10,6 @@ import checkoutRouter from "./modules/checkout/checkout.route.js";
 import orderRouter from "./modules/order/order.route.js";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-import { fileURLToPath } from "url";
-import path from "path";
 
 const app = express();
 dotenv.config();
@@ -29,7 +27,6 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-app.use(express.static(path.join(__dirname, "/client/dist")));
 
 // Routes
 app.use("/api/auth", authRouter);
@@ -44,8 +41,6 @@ app.use("/api/order", orderRouter);
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "OK" });
 });
-
-
 
 // Error handling middleware
 app.use((err, req, res, next) => {
