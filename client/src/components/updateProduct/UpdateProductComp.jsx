@@ -195,147 +195,42 @@ export default function UpdatedProductComp() {
   };
 
   return (
-    <div className="p-3 max-w-3xl mx-auto min-h-screen">
-      <h1 className="text-center text-3xl my-7 font-semibold">
-        Update a Product
-      </h1>
-      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-        <div className="flex flex-col gap-4 sm:flex-row justify-between">
-          <TextInput
-            type="text"
-            placeholder="Title"
-            required
-            id="title"
-            className="flex-1"
-            onChange={(e) =>
-              setFormData({ ...formData, title: e.target.value })
-            }
-            value={formData.title}
+    <>
+      <div className="flex flex-col md:flex-row">
+        <div className="p-7 border-b md:border-r md:min-h-screen border-gray-500">
+          <FilterForm
+            sidebarData={sidebarData}
+            handleChange={handleChange}
+            categories={categories}
+            handleSubmit={handleSubmit}
           />
-          <Select
-            id="category"
-            value={formData.category}
-            onChange={(e) =>
-              setFormData({ ...formData, category: e.target.value })
-            }
-          >
-            <option value="">No category selected</option>
-            {categories.map((cat) => (
-              <option key={cat._id} value={cat._id}>
-                {cat.name}
-              </option>
-            ))}
-          </Select>
-          {propertiesToFill.map((p) => (
-            <div key={p.propertyName} className="flex items-center gap-2">
-              <label>
-                {p.propertyName.charAt(0).toUpperCase() +
-                  p.propertyName.slice(1)}
-              </label>
-              <Select
-                value={productProperties[p.propertyName]}
-                onChange={(ev) =>
-                  setProductProp(p.propertyName, ev.target.value)
-                }
-              >
-                {p.values.map((v) => (
-                  <option key={v} value={v}>
-                    {v}
-                  </option>
-                ))}
-              </Select>
-            </div>
-          ))}
         </div>
-        <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
-          <FileInput
-            type="file"
-            accept="image/*"
-            id="images"
-            multiple
-            onChange={(e) => setFiles(e.target.files)}
-          />
-          <Button
-            type="button"
-            gradientDuoTone="purpleToBlue"
-            size="sm"
-            outline
-            onClick={handleImageSubmit}
-            disabled={imageUploadProgress}
-          >
-            {imageUploadProgress ? (
-              <div className="w-16 h-16">
-                <CircularProgressbar
-                  value={imageUploadProgress}
-                  text={`${imageUploadProgress || 0}%`}
-                />
-              </div>
-            ) : (
-              "Upload Image"
+        <div className="w-full">
+          <h1 className="text-3xl font-semibold sm:border-b border-gray-500 p-3 mt-5">
+            نتائج المنتجات:
+          </h1>
+          <div className="p-7 flex flex-wrap gap-4">
+            {loading && (
+              <p className="text-xl text-gray-500">جاري التحميل...</p>
             )}
-          </Button>
-        </div>
-        {imageUploadError && <Alert color="failure">{imageUploadError}</Alert>}
-        <div className="grid grid-cols-2 gap-2">
-          {images.map((img, index) => (
-            <div className="relative" key={index}>
-              <img src={img} alt="" className="h-40 w-full object-cover" />
+            {!loading && products.length === 0 && (
+              <p className="text-xl text-gray-500">لم يتم العثور على منتجات.</p>
+            )}
+            {!loading &&
+              products.map((productInfo) => (
+                <ProductBox key={productInfo._id} productInfo={productInfo} />
+              ))}
+            {showMore && (
               <button
-                className="absolute top-0 right-0 bg-red-600 text-white rounded-full"
-                onClick={() => handleRemoveImage(index)}
+                onClick={handleShowMore}
+                className="text-teal-500 text-lg hover:underline p-7 w-full"
               >
-                X
+                عرض المزيد
               </button>
-            </div>
-          ))}
+            )}
+          </div>
         </div>
-        <Textarea
-          rows={5}
-          placeholder="Brief description"
-          required
-          id="briefDesc"
-          onChange={(e) =>
-            setFormData({ ...formData, briefDesc: e.target.value })
-          }
-          value={formData.briefDesc}
-        />
-        <div className="flex flex-col">
-          <label htmlFor="content" className="text-gray-700">
-            Content
-          </label>
-          <ReactQuill
-            ref={quillRef}
-            theme="snow"
-            value={formData.content}
-            onChange={(value) => setFormData({ ...formData, content: value })}
-            modules={{
-              toolbar: [
-                [{ header: [1, 2, false] }],
-                ["bold", "italic", "underline", "strike"],
-                ["link", "image"],
-                ["clean"],
-              ],
-            }}
-          />
-        </div>
-        <div className="flex gap-4">
-          <TextInput
-            type="number"
-            placeholder="Price"
-            required
-            id="price"
-            className="flex-1"
-            onChange={(e) =>
-              setFormData({ ...formData, price: Number(e.target.value) })
-            }
-            value={formData.price}
-          />
-          <Button type="submit" gradientDuoTone="greenToBlue">
-            Update Product
-          </Button>
-        </div>
-        {publishError && <Alert color="failure">{publishError}</Alert>}
-      </form>
-    </div>
+      </div>
+    </>
   );
 }

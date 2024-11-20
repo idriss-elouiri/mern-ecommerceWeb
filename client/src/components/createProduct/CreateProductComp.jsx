@@ -144,7 +144,10 @@ export default function CreateProductComp() {
 
   const handleFormChange = (e) => {
     const { id, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [id]: value }));
+
+    const updatedValue = id === "price" ? parseFloat(value) : value;
+
+    setFormData((prevData) => ({ ...prevData, [id]: updatedValue }));
   };
 
   const propertiesToFill = () => {
@@ -169,14 +172,12 @@ export default function CreateProductComp() {
 
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
-      <h1 className="text-center text-3xl my-7 font-semibold">
-        Create a product
-      </h1>
+      <h1 className="text-center text-3xl my-7 font-semibold">إنشاء منتج</h1>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
           <TextInput
             type="text"
-            placeholder="Title"
+            placeholder="العنوان"
             required
             id="title"
             className="flex-1"
@@ -187,7 +188,7 @@ export default function CreateProductComp() {
             value={formData.category}
             onChange={handleFormChange}
           >
-            <option value="0">No category selected</option>
+            <option value="0">لم يتم اختيار فئة</option>
             {categories.map((cat) => (
               <option key={cat._id} value={cat._id}>
                 {cat.name}
@@ -239,7 +240,7 @@ export default function CreateProductComp() {
                 />
               </div>
             ) : (
-              "Upload Image"
+              "رفع الصورة"
             )}
           </Button>
         </div>
@@ -254,7 +255,7 @@ export default function CreateProductComp() {
               <div key={link} className="relative group">
                 <img
                   src={link}
-                  alt="Product"
+                  alt="منتج"
                   className="object-cover h-32 w-44 rounded-md border p-2 cursor-pointer transition-transform transform-gpu group-hover:scale-105"
                 />
                 <button
@@ -282,7 +283,7 @@ export default function CreateProductComp() {
         </div>
         <Textarea
           id="briefDesc"
-          placeholder="Brief description"
+          placeholder="وصف مختصر"
           required
           onChange={handleFormChange}
         />
@@ -292,11 +293,19 @@ export default function CreateProductComp() {
           onChange={(value) =>
             setFormData((prev) => ({ ...prev, content: value }))
           }
-          placeholder="Content"
+          placeholder="المحتوى"
+        />
+        <TextInput
+          type="number"
+          placeholder="price"
+          required
+          id="price"
+          className="flex-1"
+          onChange={handleFormChange}
         />
         <div className="flex justify-end mt-3">
           <Button type="submit" gradientDuoTone="purpleToBlue">
-            Create Product
+            إنشاء المنتج
           </Button>
         </div>
         {publishError && <Alert color="failure">{publishError}</Alert>}

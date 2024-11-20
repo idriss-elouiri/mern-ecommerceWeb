@@ -68,88 +68,89 @@ export default function DashProducts() {
   };
 
   return (
-    <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
-      {currentUser.isAdmin ? (
-        userProducts.length > 0 ? (
-          <>
-            <Table hoverable className='shadow-md'>
-              <Table.Head>
-                <Table.HeadCell>Date updated</Table.HeadCell>
-                <Table.HeadCell>Product image</Table.HeadCell>
-                <Table.HeadCell>Product title</Table.HeadCell>
-                <Table.HeadCell>Category</Table.HeadCell>
-                <Table.HeadCell>Delete</Table.HeadCell>
-                <Table.HeadCell>Edit</Table.HeadCell>
-              </Table.Head>
-              <Table.Body className='divide-y'>
-                {userProducts.map((product) => (
-                  <Table.Row key={product._id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                    <Table.Cell>{new Date(product.updatedAt).toLocaleDateString()}</Table.Cell>
-                    <Table.Cell>
-                      <Link to={`/product-details/${product.slug}`}>
-                        <img src={product.images[0]} alt={product.title} className='w-20 h-10 object-cover bg-gray-500' />
-                      </Link>
-                    </Table.Cell>
-                    <Table.Cell>
-                      <Link className='font-medium text-gray-900 dark:text-white' to={`/product-details/${product.slug}`}>
-                        {product.title}
-                      </Link>
-                    </Table.Cell>
-                    <Table.Cell>{product.category}</Table.Cell>
-                    <Table.Cell>
-                      <span
-                        onClick={() => {
-                          setShowModal(true);
-                          setProductIdToDelete(product._id);
-                        }}
-                        className='font-medium text-red-500 hover:underline cursor-pointer'
-                      >
-                        Delete
-                      </span>
-                    </Table.Cell>
-                    <Table.Cell>
-                      <Link className='text-teal-500 hover:underline' to={`/update-product/${product._id}`}>
-                        Edit
-                      </Link>
-                    </Table.Cell>
-                  </Table.Row>
-                ))}
-              </Table.Body>
-            </Table>
-            {showMore && (
-              <button
-                onClick={handleShowMore}
-                className='w-full text-teal-500 self-center text-sm py-7'
-              >
-                Show more
-              </button>
-            )}
-          </>
-        ) : (
-          <p>You have no products yet!</p>
-        )
-      ) : (
-        <p>You do not have admin access!</p>
-      )}
-      <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
-        <Modal.Header />
-        <Modal.Body>
-          <div className='text-center'>
-            <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
-            <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
-              Are you sure you want to delete this product?
-            </h3>
-            <div className='flex justify-center gap-4'>
-              <Button color='failure' onClick={handleDeleteProduct}>
-                Yes, I'm sure
-              </Button>
-              <Button color='gray' onClick={() => setShowModal(false)}>
-                No, cancel
-              </Button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal>
-    </div>
+    <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500' dir='rtl'>
+  {currentUser.isAdmin ? (
+    userProducts.length > 0 ? (
+      <>
+        <Table hoverable className='shadow-md'>
+          <Table.Head>
+            <Table.HeadCell>تاريخ التحديث</Table.HeadCell>
+            <Table.HeadCell>صورة المنتج</Table.HeadCell>
+            <Table.HeadCell>عنوان المنتج</Table.HeadCell>
+            <Table.HeadCell>الفئة</Table.HeadCell>
+            <Table.HeadCell>حذف</Table.HeadCell>
+            <Table.HeadCell>تعديل</Table.HeadCell>
+          </Table.Head>
+          <Table.Body className='divide-y'>
+            {userProducts.map((product) => (
+              <Table.Row key={product._id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                <Table.Cell>{new Date(product.updatedAt).toLocaleDateString()}</Table.Cell>
+                <Table.Cell>
+                  <Link to={`/product-details/${product.slug}`}>
+                    <img src={product.images[0]} alt={product.title} className='w-20 h-10 object-cover bg-gray-500' />
+                  </Link>
+                </Table.Cell>
+                <Table.Cell>
+                  <Link className='font-medium text-gray-900 dark:text-white' to={`/product-details/${product.slug}`}>
+                    {product.title}
+                  </Link>
+                </Table.Cell>
+                <Table.Cell>{product.category}</Table.Cell>
+                <Table.Cell>
+                  <span
+                    onClick={() => {
+                      setShowModal(true);
+                      setProductIdToDelete(product._id);
+                    }}
+                    className='font-medium text-red-500 hover:underline cursor-pointer'
+                  >
+                    حذف
+                  </span>
+                </Table.Cell>
+                <Table.Cell>
+                  <Link className='text-teal-500 hover:underline' to={`/update-product/${product._id}`}>
+                    تعديل
+                  </Link>
+                </Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table>
+        {showMore && (
+          <button
+            onClick={handleShowMore}
+            className='w-full text-teal-500 self-center text-sm py-7'
+          >
+            عرض المزيد
+          </button>
+        )}
+      </>
+    ) : (
+      <p>ليس لديك أي منتجات حتى الآن!</p>
+    )
+  ) : (
+    <p>ليس لديك صلاحية وصول كمسؤول!</p>
+  )}
+  <Modal show={showModal} onClose={() => setShowModal(false)} popup size='md'>
+    <Modal.Header />
+    <Modal.Body>
+      <div className='text-center'>
+        <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
+        <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
+          هل أنت متأكد أنك تريد حذف هذا المنتج؟
+        </h3>
+        <div className='flex justify-center gap-4'>
+          <Button color='failure' onClick={handleDeleteProduct}>
+            نعم، أنا متأكد
+          </Button>
+          <Button color='gray' onClick={() => setShowModal(false)}>
+            لا، إلغاء
+          </Button>
+        </div>
+      </div>
+    </Modal.Body>
+  </Modal>
+</div>
+
   );
 }

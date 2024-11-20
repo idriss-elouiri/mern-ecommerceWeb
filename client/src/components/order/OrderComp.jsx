@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 const OrderComp = () => {
   const { id } = useParams();
   const [order, setOrder] = useState(null);
+  const [orderStatus, setOrderStatus] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -11,11 +12,14 @@ const OrderComp = () => {
     const fetchOrder = async () => {
       if (id) {
         try {
-          const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/order/get?_id=${id}`, {
-            method: "GET",
-            credentials: "include",
-          });
-          if (!response.ok) throw new Error('Failed to fetch order');
+          const response = await fetch(
+            `${import.meta.env.VITE_BACKEND_URL}/api/order/get?_id=${id}`,
+            {
+              method: "GET",
+              credentials: "include",
+            }
+          );
+          if (!response.ok) throw new Error("Failed to fetch order");
           const data = await response.json();
           setOrder(data);
         } catch (error) {
@@ -25,18 +29,22 @@ const OrderComp = () => {
         }
       }
     };
-
     fetchOrder();
   }, [id]);
 
   const calculateSubtotal = () => {
-    return order?.cartProducts?.reduce((total, product) => total + product.price, 0) || 0;
+    return (
+      order?.cartProducts?.reduce(
+        (total, product) => total + product.price,
+        0
+      ) || 0
+    );
   };
 
   const subtotal = calculateSubtotal();
 
   if (loading) {
-    return <div className="text-center">Loading order...</div>;
+    return <div className="text-center">جاري تحميل الطلب...</div>;
   }
 
   if (error) {
@@ -46,21 +54,26 @@ const OrderComp = () => {
   return (
     <section className="max-w-2xl mx-auto mt-20 md:mt-10">
       <div className="text-center">
-        <h2 className="text-primary font-bold text-4xl italic">Orders</h2>
+        <h2 className="text-primary font-bold text-4xl italic">الطلبات</h2>
         <div className="mt-4 mb-8">
-          <p>Thanks for your order.</p>
-          <p>We will call you when your order is on the way.</p>
+          <p>شكراً لطلبك.</p>
+          <p>سوف نتصل بك عندما يكون طلبك في الطريق.</p>
         </div>
       </div>
       {order && (
         <>
           {order.cartProducts.map((product) => (
             <div className="flex mb-5 items-center" key={product._id}>
+              <div></div>
               <div
                 className="bg-gray-100 p-3 rounded-xl shrink-0"
                 style={{ boxShadow: "inset 1px 0px 10px 10px rgba(0,0,0,0.1)" }}
               >
-                <img className="w-24" src={product.images[0]} alt={product.title} />
+                <img
+                  className="w-24"
+                  src={product.images[0]}
+                  alt={product.title}
+                />
               </div>
               <div className="pl-4">
                 <h3 className="font-bold text-lg">{product.title}</h3>
@@ -85,7 +98,13 @@ const OrderComp = () => {
           <form>
             <div className="mt-8 flex flex-col">
               <div className="mt-8">
-                {['phone', 'streetAddress', 'city', 'country', 'postalCode'].map((field) => (
+                {[
+                  "phone",
+                  "streetAddress",
+                  "city",
+                  "country",
+                  "postalCode",
+                ].map((field) => (
                   <input
                     key={field}
                     name={field}
@@ -93,23 +112,32 @@ const OrderComp = () => {
                     value={order[field]}
                     disabled
                     className="p-2 border-[3px] border-[lightgray] bg-slate-100 outline-none w-full rounded mb-2"
-                    type={field === 'postalCode' || field === 'phone' ? 'number' : 'text'}
-                    placeholder={field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1')}
+                    type={
+                      field === "postalCode" || field === "phone"
+                        ? "number"
+                        : "text"
+                    }
+                    placeholder={
+                      field.charAt(0).toUpperCase() +
+                      field.slice(1).replace(/([A-Z])/g, " $1")
+                    }
                   />
                 ))}
               </div>
             </div>
             <div className="mt-8">
               <div className="flex my-3">
-                <h3 className="grow font-bold text-gray-400">Subtotal:</h3>
+                <h3 className="grow font-bold text-gray-400">
+                  المجموع الفرعي:
+                </h3>
                 <h3 className="font-bold">${subtotal}</h3>
               </div>
               <div className="flex my-3">
-                <h3 className="grow font-bold text-gray-400">Delivery:</h3>
+                <h3 className="grow font-bold text-gray-400">التوصيل:</h3>
                 <h3 className="font-bold">$5</h3>
               </div>
               <div className="flex my-3 border-t pt-3 border-dashed border-emerald-500">
-                <h3 className="grow font-bold text-gray-400">Total:</h3>
+                <h3 className="grow font-bold text-gray-400">الإجمالي:</h3>
                 <h3 className="font-bold">${subtotal + 5}</h3>
               </div>
             </div>

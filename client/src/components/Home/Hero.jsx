@@ -30,7 +30,7 @@ const Hero = () => {
         const res = await fetch(
           `${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts?limit=5`
         );
-        if (!res.ok) throw new Error("Failed to fetch products");
+        if (!res.ok) throw new Error("فشل في جلب المنتجات");
         const data = await res.json();
         setProductsInfo(data.products);
       } catch (err) {
@@ -42,8 +42,8 @@ const Hero = () => {
     fetchProducts();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return <div>جاري التحميل...</div>;
+  if (error) return <div>خطأ: {error}</div>;
 
   return (
     <div className="w-[90%] mx-auto my-10">
@@ -58,13 +58,13 @@ const Hero = () => {
                     <p className="text-slate-600">{briefDesc}</p>
                     <div className="flex items-center gap-3">
                       <p className="flex items-center text-primary px-4 py-2 bg-brandWhite rounded-full gap-3 font-semibold">
-                        Exclusive offer -50% <FaLongArrowAltRight />
+                        عرض حصري -50% <FaLongArrowAltRight />
                       </p>
                       <Link
                         to={`/product-details/${slug}`}
                         className="underline font-semibold"
                       >
-                        Buy now
+                        اشتري الآن
                       </Link>
                     </div>
                   </div>

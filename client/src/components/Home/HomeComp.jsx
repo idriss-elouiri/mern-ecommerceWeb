@@ -48,7 +48,7 @@ const HomeComp = () => {
       ) : error ? (
         <p className="text-red-500">Error: {error}</p>
       ) : (
-        <Product products={products} textHeading="Latest Products" />
+        <Product products={products} textHeading="احدث المنتجات" />
       )}
       <Footer />
     </main>

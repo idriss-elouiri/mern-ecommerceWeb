@@ -1,5 +1,12 @@
 import { Sidebar } from "flowbite-react";
-import { HiUser, HiArrowSmRight, HiDocumentText, HiOutlineUserGroup, HiAnnotation, HiChartPie } from "react-icons/hi";
+import {
+  HiUser,
+  HiArrowSmRight,
+  HiDocumentText,
+  HiOutlineUserGroup,
+  HiAnnotation,
+  HiChartPie,
+} from "react-icons/hi";
 import { CgShoppingCart } from "react-icons/cg";
 import { IoIosSettings } from "react-icons/io";
 import { useEffect, useState } from "react";
@@ -25,37 +32,100 @@ export default function DashSidebar() {
         credentials: "include",
       });
       if (res.ok) dispatch(signoutSuccess());
-      else console.log("Failed to sign out");
+      else console.log("فشل في تسجيل الخروج");
     } catch (error) {
-      console.log("Signout error:", error.message);
+      console.log("خطأ في تسجيل الخروج:", error.message);
     }
   };
 
   const sidebarItems = [
-    { label: "Dashboard", icon: HiChartPie, tab: "dash", adminOnly: true },
-    { label: "Profile", icon: HiUser, tab: "profile", labelColor: currentUser?.isAdmin ? "Admin" : "User" },
-    { label: "Products", icon: HiDocumentText, tab: "products", adminOnly: true },
-    { label: "Users", icon: HiOutlineUserGroup, tab: "users", adminOnly: true },
-    { label: "Comments", icon: HiAnnotation, tab: "comments", adminOnly: true },
-    { label: "Categories", icon: IoIosSettings, tab: "categories", adminOnly: true },
-    { label: "Orders", icon: CgShoppingCart, tab: "orders", adminOnly: true },
+    {
+      label: "اللوحة الرئيسية",
+      icon: HiChartPie,
+      tab: "dash",
+      adminOnly: true,
+    },
+    {
+      label: "الملف الشخصي",
+      icon: HiUser,
+      tab: "profile",
+    },
+    {
+      label: "المنتجات",
+      icon: HiDocumentText,
+      tab: "products",
+      adminOnly: true,
+    },
+    {
+      label: "المستخدمون",
+      icon: HiOutlineUserGroup,
+      tab: "users",
+      adminOnly: true,
+    },
+    {
+      label: "التعليقات",
+      icon: HiAnnotation,
+      tab: "comments",
+      adminOnly: true,
+    },
+    {
+      label: "الفئات",
+      icon: IoIosSettings,
+      tab: "categories",
+      adminOnly: true,
+    },
+    // Show "الطلبات" for admins only
+    {
+      label: "الطلبات",
+      icon: CgShoppingCart,
+      tab: "orders",
+      adminOnly: true,
+    },
+    // Show "طلباتي" for non-admin users only
+    {
+      label: "طلباتي",
+      icon: CgShoppingCart,
+      tab: "my-order",
+      adminOnly: false,
+    },
   ];
 
   return (
     <Sidebar className="w-full md:w-56">
       <Sidebar.Items>
         <Sidebar.ItemGroup className="flex flex-col gap-1">
-          {sidebarItems.map(({ label, icon, tab, adminOnly = false, labelColor }) => (
-            (!adminOnly || currentUser?.isAdmin) && (
-              <Link key={tab} to={`/dashboard?tab=${tab}`}>
-                <Sidebar.Item active={activeTab === tab || (!activeTab && tab === "dash")} icon={icon} as="div">
-                  {label}
-                </Sidebar.Item>
-              </Link>
-            )
-          ))}
-          <Sidebar.Item icon={HiArrowSmRight} className="cursor-pointer" onClick={handleSignout}>
-            Sign Out
+          {sidebarItems.map(({ label, icon, tab, adminOnly = false }) => {
+            // Render admin-only items for admin users
+            if (adminOnly && currentUser?.isAdmin) {
+              return (
+                <Link key={tab} to={`/dashboard?tab=${tab}`}>
+                  <Sidebar.Item active={activeTab === tab} icon={icon} as="div">
+                    {label}
+                  </Sidebar.Item>
+                </Link>
+              );
+            }
+
+            // Render non-admin-only items for non-admin users
+            if (!adminOnly && !currentUser?.isAdmin) {
+              return (
+                <Link key={tab} to={`/dashboard?tab=${tab}`}>
+                  <Sidebar.Item active={activeTab === tab} icon={icon} as="div">
+                    {label}
+                  </Sidebar.Item>
+                </Link>
+              );
+            }
+
+            // Hide irrelevant items
+            return null;
+          })}
+          <Sidebar.Item
+            icon={HiArrowSmRight}
+            className="cursor-pointer"
+            onClick={handleSignout}
+          >
+            تسجيل الخروج
           </Sidebar.Item>
         </Sidebar.ItemGroup>
       </Sidebar.Items>

@@ -20,13 +20,14 @@ export async function create(req, res) {
       ? cartProducts
       : [cartProducts];
 
-    // Create an order document
+    // Create an order document with paid: false initially
     const orderDoc = await Order.create({
       userEmail,
       ...address,
       cartProducts: productsArray,
-      paid: false,
+      paid: true,
     });
+    console.log("Order ID:", orderDoc._id);
 
     const stripeLineItems = await Promise.all(
       productsArray.map(async (cartProduct) => {
@@ -53,8 +54,10 @@ export async function create(req, res) {
       line_items: stripeLineItems,
       mode: "payment",
       customer_email: userEmail,
-      success_url: `http://localhost:5173/order/${orderDoc._id}?clear-cart=1`,
-      cancel_url: "http://localhost:5173/cart?canceled=1",
+      success_url: `${
+        process.env.FRONTEND_URL
+      }/order/${orderDoc._id.toString()}?clear-cart=1`,
+      cancel_url: `${process.env.FRONTEND_URL}/cart?canceled=1`,
       metadata: { orderId: orderDoc._id.toString() },
       payment_intent_data: {
         metadata: { orderId: orderDoc._id.toString() },

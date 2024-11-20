@@ -23,7 +23,7 @@ const DashboardCard = ({ title, count, lastMonthCount, Icon }) => (
         <HiArrowNarrowUp />
         {lastMonthCount}
       </span>
-      <div className="text-gray-500">Last month</div>
+      <div className="text-gray-500">الشهر الماضي</div>
     </div>
   </div>
 );
@@ -101,19 +101,19 @@ const DashboardComp = () => {
     <div className="p-3 md:mx-auto">
       <div className="flex-wrap flex gap-4 justify-center">
         <DashboardCard
-          title="Total Users"
+          title="إجمالي المستخدمين"
           count={totalUsers}
           lastMonthCount={lastMonthUsers}
           Icon={HiOutlineUserGroup}
         />
         <DashboardCard
-          title="Total Comments"
+          title="إجمالي التعليقات"
           count={totalComments}
           lastMonthCount={lastMonthComments}
           Icon={HiAnnotation}
         />
         <DashboardCard
-          title="Total Products"
+          title="إجمالي المنتجات"
           count={totalProducts}
           lastMonthCount={lastMonthProducts}
           Icon={HiDocumentText}
@@ -122,19 +122,19 @@ const DashboardComp = () => {
       <div className="flex flex-wrap gap-4 py-3 mx-auto justify-center">
         {[
           {
-            title: "Recent Users",
+            title: "المستخدمون الجدد",
             data: users,
             fields: ["profilePicture", "name"],
             link: "/dashboard?tab=users",
           },
           {
-            title: "Recent Comments",
+            title: "التعليقات الحديثة",
             data: comments,
             fields: ["content", "numberOfLikes"],
             link: "/dashboard?tab=comments",
           },
           {
-            title: "Recent Products",
+            title: "المنتجات الحديثة",
             data: products,
             fields: ["images[0]", "title", "category"],
             link: "/dashboard?tab=products",
@@ -147,7 +147,7 @@ const DashboardComp = () => {
             <div className="flex justify-between p-3 text-sm font-semibold">
               <h1 className="text-center p-2">{title}</h1>
               <Button outline gradientDuoTone="purpleToPink">
-                <Link to={link}>See all</Link>
+                <Link to={link}>عرض الكل</Link>
               </Button>
             </div>
             <Table hoverable>
@@ -155,8 +155,14 @@ const DashboardComp = () => {
                 {fields.map((field, idx) => (
                   <Table.HeadCell key={idx}>
                     {field === "images[0]"
-                      ? "Product Image"
-                      : field.charAt(0).toUpperCase() + field.slice(1)}
+                      ? "صورة المنتج"
+                      : field === "name"
+                      ? "الاسم"
+                      : field === "content"
+                      ? "التعليق"
+                      : field === "numberOfLikes"
+                      ? "الإعجابات"
+                      : field}
                   </Table.HeadCell>
                 ))}
               </Table.Head>

@@ -27,7 +27,10 @@ const Categories = () => {
           if (Array.isArray(categoriesData)) {
             setCategories(categoriesData);
           } else {
-            console.error("Expected categories to be an array but got:", categoriesData);
+            console.error(
+              "Expected categories to be an array but got:",
+              categoriesData
+            );
           }
         }
       } catch (error) {
@@ -37,7 +40,7 @@ const Categories = () => {
 
     fetchData();
   }, []);
-console.log(categories)
+  console.log(categories);
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-[90%] mx-auto">
       {Array.isArray(categories) && categories.length > 0 ? (
@@ -51,13 +54,13 @@ console.log(categories)
               <div key={category._id}>
                 <div className="col-span-2 py-10 pl-5 bg-gradient-to-br from-gray-400/90 to-gray-100 text-white rounded-3xl relative h-[320px] flex items-end">
                   <div className="mb-4">
-                    <p className="mb-[2px] text-white">Enjoy</p>
-                    <p className="text-2xl font-semibold mb-[2px]">With</p>
+                    <p className="mb-[2px] text-white">استمتع بـ</p>
+                    <p className="text-2xl font-semibold mb-[2px]">مع</p>
                     <p className="text-4xl xl:text-5xl font-bold opacity-20 mb-2">
                       {category.name}
                     </p>
                     <Button
-                      text="Browse"
+                      text="تصفح"
                       bgColor="bg-white"
                       textColor="text-primary"
                       category={category._id}
@@ -79,7 +82,7 @@ console.log(categories)
           );
         })
       ) : (
-        <p>No categories available.</p>
+        <p>لا توجد فئات متاحة.</p>
       )}
     </div>
   );

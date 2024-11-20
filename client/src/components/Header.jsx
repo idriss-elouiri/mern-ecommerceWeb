@@ -1,10 +1,10 @@
-import { Avatar, Button, Dropdown, Navbar, TextInput } from 'flowbite-react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { AiOutlineSearch } from 'react-icons/ai';
+import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AiOutlineSearch } from "react-icons/ai";
 import { FaCartShopping } from "react-icons/fa6";
-import { useSelector, useDispatch } from 'react-redux';
-import { signoutSuccess } from '../redux/user/userSlice';
-import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import { signoutSuccess } from "../redux/user/userSlice";
+import { useEffect, useState } from "react";
 
 export default function Header() {
   const path = useLocation().pathname;
@@ -13,113 +13,114 @@ export default function Header() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
   const items = useSelector((state) => state.cart.items);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
-    const searchTermFromUrl = urlParams.get('searchTerm');
+    const searchTermFromUrl = urlParams.get("searchTerm");
     if (searchTermFromUrl) {
       setSearchTerm(searchTermFromUrl);
     }
   }, [location.search]);
 
-
+  // Sign out user
   const handleSignout = async () => {
     try {
-      const res = await fetch('/api/user/signout', {
-        method: 'POST',
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        console.log(data.message);
-      } else {
-        dispatch(signoutSuccess());
-      }
-    } catch (error) {
-      console.log(error.message);
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/user/signout`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+      if (response.ok) dispatch(signoutSuccess());
+    } catch (err) {
+      console.error(err.message);
     }
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const urlParams = new URLSearchParams(location.search);
-    urlParams.set('searchTerm', searchTerm);
+    urlParams.set("searchTerm", searchTerm);
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
   };
 
   return (
-    <Navbar className='border-b-2'>
-      <Link
-        to='/'
-        className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'
-      >
-        <span className='px-2 py-1 bg-primary rounded-md text-white'>
-          omar
-        </span>
-        Electro
-      </Link>
-      <form onSubmit={handleSubmit}>
-        <TextInput
-          type='text'
-          placeholder='Search...'
-          rightIcon={AiOutlineSearch}
-          className='hidden lg:inline'
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </form>
-      <Button className='w-12 h-10 lg:hidden' color='gray' pill>
-        <AiOutlineSearch />
-      </Button>
-      <div className='flex items-center justify-center gap-2 md:order-2'>
+    <div dir="rtl">
+      <Navbar className="border-b-2">
         <Link
-        to={"/cart"}
-          className="flex items-center relative mr-3"
+          to="/"
+          className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white"
         >
-          <FaCartShopping className='text-[25px]'/>
-          <span className='text-sm w-5 h-5 text-center flex justify-center items-center rounded-full border bg-primary text-brandWhite absolute -top-2 -right-3'>{items.length}</span>
+          <span className="px-2 py-1 bg-primary rounded-md text-white">
+            عمر
+          </span>
+          الكتروني
         </Link>
-        {currentUser ? (
-          <Dropdown
-            arrowIcon={false}
-            inline
-            label={
-              <Avatar alt='user' img={currentUser.profilePicture} rounded />
-            }
-          >
-            <Dropdown.Header>
-              <span className='block text-sm'>@{currentUser.username}</span>
-              <span className='block text-sm font-medium truncate'>
-                {currentUser.email}
-              </span>
-            </Dropdown.Header>
-            <Link to={'/dashboard?tab=profile'}>
-              <Dropdown.Item>Profile</Dropdown.Item>
-            </Link>
-            <Dropdown.Divider />
-            <Dropdown.Item onClick={handleSignout}>Sign out</Dropdown.Item>
-          </Dropdown>
-        ) : (
-          <Link to='/log-in'>
-            <Button gradientDuoTone='purpleToBlue' outline>
-              Log In
-            </Button>
+        <form onSubmit={handleSubmit}>
+          <TextInput
+            type="text"
+            placeholder="ابحث..."
+            rightIcon={AiOutlineSearch}
+            className="hidden lg:inline"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </form>
+        <Button className="w-12 h-10 lg:hidden" color="gray" pill>
+          <AiOutlineSearch />
+        </Button>
+        <div className="flex items-center justify-center gap-2 md:order-2">
+          <Link to={"/cart"} className="flex items-center relative mr-3">
+            <FaCartShopping className="text-[25px]" />
+            <span className="text-sm w-5 h-5 text-center flex justify-center items-center rounded-full border bg-primary text-brandWhite absolute -top-2 -right-3">
+              {items.length}
+            </span>
           </Link>
-        )}
-        <Navbar.Toggle />
-      </div>
-      <Navbar.Collapse>
-        <Navbar.Link active={path === '/'} as={'div'}>
-          <Link to='/'>Home</Link>
-        </Navbar.Link>
-        <Navbar.Link active={path === '/about'} as={'div'}>
-          <Link to='/product-page'>Products</Link>
-        </Navbar.Link>
-        <Navbar.Link active={path === '/projects'} as={'div'}>
-          <Link to='/about'>About</Link>
-        </Navbar.Link>
-      </Navbar.Collapse>
-    </Navbar>
+          {currentUser ? (
+            <Dropdown
+              arrowIcon={false}
+              inline
+              label={
+                <Avatar alt="user" img={currentUser.profilePicture} rounded />
+              }
+            >
+              <Dropdown.Header>
+                <span className="block text-sm">@{currentUser.username}</span>
+                <span className="block text-sm font-medium truncate">
+                  {currentUser.email}
+                </span>
+              </Dropdown.Header>
+              <Link to={"/dashboard?tab=profile"}>
+                <Dropdown.Item>الملف الشخصي</Dropdown.Item>
+              </Link>
+              <Dropdown.Divider />
+              <Dropdown.Item onClick={handleSignout}>
+                تسجيل الخروج
+              </Dropdown.Item>
+            </Dropdown>
+          ) : (
+            <Link to="/log-in">
+              <Button gradientDuoTone="purpleToBlue" outline>
+                تسجيل الدخول
+              </Button>
+            </Link>
+          )}
+          <Navbar.Toggle />
+        </div>
+        <Navbar.Collapse>
+          <Navbar.Link active={path === "/"} as={"div"} className="ml-5">
+            <Link to="/">الرئيسية</Link>
+          </Navbar.Link>
+          <Navbar.Link active={path === "/product-page"} as={"div"}>
+            <Link to="/product-page">المنتجات</Link>
+          </Navbar.Link>
+          <Navbar.Link active={path === "/about"} as={"div"}>
+            <Link to="/about">حول</Link>
+          </Navbar.Link>
+        </Navbar.Collapse>
+      </Navbar>
+    </div>
   );
 }

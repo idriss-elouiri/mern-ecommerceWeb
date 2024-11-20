@@ -17,6 +17,7 @@ const categorySchema = new mongoose.Schema(
     parent: {
       type: mongoose.Types.ObjectId,
       ref: "Category",
+      default: null, 
     },
     properties: [
       {

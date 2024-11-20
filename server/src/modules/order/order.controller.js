@@ -2,9 +2,10 @@ import Order from "./order.model.js";
 
 export async function getOrder(req, res, next) {
   try {
-    const userEmail = req.user.email;
     const { _id } = req.query;
+    const { userEmail } = req.query;
 
+    // Inside your getOrder function
     if (_id) {
       const order = await Order.findById(_id);
       if (!order) {
@@ -19,7 +20,7 @@ export async function getOrder(req, res, next) {
     }
 
     if (userEmail) {
-      const orders = await Order.find({ userEmail });
+      const orders = await Order.find({userEmail });
       return res.status(200).json(orders);
     }
 

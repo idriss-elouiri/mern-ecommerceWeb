@@ -14,7 +14,7 @@ const Product = React.memo(({ products, textHeading }) => {
     <div className="w-[90%] mx-auto my-10">
       <header className="text-center mb-10 max-w-[600px] mx-auto space-y-2">
         <h1 className="text-3xl font-bold lg:text-4xl">{textHeading}</h1>
-        <p className="text-xs text-gray-400">Lorem ipsum dolor sit amet.</p>
+        <p className="text-xs text-gray-400">لوريم إيبسوم دولور سيت أميت.</p>
       </header>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-10 gap-x-10 place-items-center">
         {products?.length > 0 ? (
@@ -33,7 +33,7 @@ const Product = React.memo(({ products, textHeading }) => {
                       handleAddToCart({ _id, images, title, price })
                     }
                   >
-                    Add to cart
+                    أضف إلى السلة
                   </button>
                 </div>
               </div>
@@ -46,7 +46,7 @@ const Product = React.memo(({ products, textHeading }) => {
             </div>
           ))
         ) : (
-          <p>No products available</p>
+          <p>لا توجد منتجات متاحة</p>
         )}
       </div>
     </div>

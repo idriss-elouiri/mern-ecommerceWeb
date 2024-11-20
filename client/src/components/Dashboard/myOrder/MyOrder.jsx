@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const pageSize = 10; // Number of orders per page
 
-export default function DashOrders() {
+export default function MyOrder() {
+  const { currentUser } = useSelector((state) => state.user);
   const [orders, setOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loadingOrders, setLoadingOrders] = useState(true);
@@ -11,12 +13,12 @@ export default function DashOrders() {
   useEffect(() => {
     fetchOrders();
   }, []);
-
+console.log(currentUser.email)
   const fetchOrders = async () => {
     setLoadingOrders(true);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/order/get`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/order/get?userEmail=${currentUser.email}`,
         {
           method: "GET",
           credentials: "include",

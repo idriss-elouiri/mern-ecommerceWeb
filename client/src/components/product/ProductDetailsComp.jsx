@@ -77,7 +77,7 @@ const ProductDetailsComp = () => {
         {product ? ( // Check if product is available
           <DetailsProductComp product={product} />
         ) : (
-          <p className="text-red-500">Product not found.</p> // Display message if product is not found
+          <p className="text-red-500">المنتج غير موجود</p> // Display message if product is not found
         )}
         <CommentSection productId={product?._id} />
         <div className="flex flex-wrap gap-5 mt-5 justify-center">

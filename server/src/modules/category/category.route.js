@@ -9,13 +9,13 @@ router.post("/create", verifyToken, categoryController.createCategory);
 router.get("/getcategories", categoryController.getCategories);
 
 router.delete(
-  "/category/:categoryId",
+  "/deletecategory/:categoryId",
   verifyToken,
   categoryController.deleteCategory
 );
 
 router.put(
-  "/category/:categoryId",
+  "/updatecategory/:categoryId",
   verifyToken,
   categoryController.updateCategory
 );

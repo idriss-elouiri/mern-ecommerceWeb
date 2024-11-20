@@ -46,7 +46,7 @@ export async function updateCategory(req, res, next) {
       {
         $set: {
           name,
-          parent,
+          parent: parent || undefined, 
           properties,
         },
       },

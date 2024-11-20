@@ -143,39 +143,45 @@ export default function SearchComp() {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row">
-        <div className="p-7 border-b md:border-r md:min-h-screen border-gray-500">
-          <FilterForm
-            sidebarData={sidebarData}
-            handleChange={handleChange}
-            categories={categories}
-            handleSubmit={handleSubmit}
-          />
-        </div>
-        <div className="w-full">
-          <h1 className="text-3xl font-semibold sm:border-b border-gray-500 p-3 mt-5">
-            Products results:
-          </h1>
-          <div className="p-7 flex flex-wrap gap-4">
-            {loading && <p className="text-xl text-gray-500">Loading...</p>}
-            {!loading && products.length === 0 && (
-              <p className="text-xl text-gray-500">No products found.</p>
-            )}
-            {!loading &&
-              products.map((productInfo) => (
-                <ProductBox key={productInfo._id} productInfo={productInfo} />
-              ))}
-            {showMore && (
-              <button
-                onClick={handleShowMore}
-                className="text-teal-500 text-lg hover:underline p-7 w-full"
-              >
-                Show More
-              </button>
-            )}
+      <>
+        <div className="flex flex-col md:flex-row">
+          <div className="p-7 border-b md:border-r md:min-h-screen border-gray-500">
+            <FilterForm
+              sidebarData={sidebarData}
+              handleChange={handleChange}
+              categories={categories}
+              handleSubmit={handleSubmit}
+            />
+          </div>
+          <div className="w-full">
+            <h1 className="text-3xl font-semibold sm:border-b border-gray-500 p-3 mt-5">
+              نتائج المنتجات:
+            </h1>
+            <div className="p-7 flex flex-wrap gap-4">
+              {loading && (
+                <p className="text-xl text-gray-500">جاري التحميل...</p>
+              )}
+              {!loading && products.length === 0 && (
+                <p className="text-xl text-gray-500">
+                  لم يتم العثور على منتجات.
+                </p>
+              )}
+              {!loading &&
+                products.map((productInfo) => (
+                  <ProductBox key={productInfo._id} productInfo={productInfo} />
+                ))}
+              {showMore && (
+                <button
+                  onClick={handleShowMore}
+                  className="text-teal-500 text-lg hover:underline p-7 w-full"
+                >
+                  عرض المزيد
+                </button>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      </>
       <Footer />
     </>
   );
