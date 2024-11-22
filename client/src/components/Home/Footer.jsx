@@ -37,7 +37,7 @@ const Footer = () => {
               className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white"
             >
               <span className="px-2 py-1 bg-primary rounded-md text-white">
-                إدريس
+                عمر
               </span>
               الكترونيات
             </Link>
@@ -89,14 +89,14 @@ const Footer = () => {
               <div>
                 <div className="flex items-center gap-3 mt-6">
                   <FaLocationArrow />
-                  <p>نويدا ، ولاية أوتار براديش</p>
+                  <p>الدار البيضاء, البرنوصي</p>
                 </div>
                 <div className="flex items-center gap-3 mt-6">
                   <FaMobileAlt />
-                  <p>0646521896</p>
+                  <p>0621541569</p>
                 </div>
                 <div className="flex items-center gap-3 mt-6">
-                  <Link to={"#"}>
+                  <Link to={"https://www.instagram.com/omartahir25/"}>
                     <FaInstagram className="text-2xl hover-text-black duration-200 hover:text-primary" />
                   </Link>
                   <Link to={"#"}>
