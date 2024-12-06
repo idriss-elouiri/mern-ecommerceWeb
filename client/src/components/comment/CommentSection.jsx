@@ -22,6 +22,7 @@ export default function CommentSection({ productId }) {
       const res = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/comment/create`,
         {
+          credentials: "include",
           method: "Post",
           headers: {
             "Content-Type": "application/json",
@@ -50,7 +51,11 @@ export default function CommentSection({ productId }) {
         const res = await fetch(
           `${
             import.meta.env.VITE_BACKEND_URL
-          }/api/comment/getProductComments/${productId}`
+          }/api/comment/getProductComments/${productId}`,
+          {
+            credentials: "include",
+            method: "GET",
+          }
         );
         if (res.ok) {
           const data = await res.json();
@@ -74,6 +79,7 @@ export default function CommentSection({ productId }) {
           import.meta.env.VITE_BACKEND_URL
         }/api/comment/likeComment/${commentId}`,
         {
+          credentials: "include",
           method: "PUT",
         }
       );
@@ -116,6 +122,7 @@ export default function CommentSection({ productId }) {
           import.meta.env.VITE_BACKEND_URL
         }/api/comment/deleteComment/${commentId}`,
         {
+          credentials: "include",
           method: "DELETE",
         }
       );
